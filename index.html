@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080a09"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>同场 SAME PLACE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<style>
+:root{--bg:#080a09;--panel:#111513;--panel2:#171c19;--line:#29312c;--text:#f1f4f1;--muted:#929d95;--green:#c7ff45;--green2:#a9e82d;--red:#ff6b79}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--green);outline-offset:2px}.app{max-width:1120px;margin:auto;min-height:100vh;padding:0 22px 100px}.top{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:#080a09ee;backdrop-filter:blur(18px);z-index:5}.brand{display:flex;gap:11px;align-items:center}.logo{width:36px;height:36px;border:1px solid var(--green);border-radius:12px;display:grid;place-items:center;color:var(--green);font-weight:800;font-size:18px}.brand strong{font-size:16px;letter-spacing:1.2px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px;margin-top:3px}.space-pill{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:9px 12px;display:flex;gap:8px;align-items:center;color:#e7ebe7;font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px #c7ff4566}.layout{display:grid;grid-template-columns:230px minmax(0,1fr) 250px;gap:24px;padding-top:25px}.left,.right{position:sticky;top:100px;align-self:start}.nav{display:grid;gap:7px}.nav button{border:0;background:transparent;color:#aeb8b0;padding:13px 14px;text-align:left;border-radius:12px;display:flex;gap:12px;align-items:center;font-size:14px}.nav button.active,.nav button:hover{background:#1a211b;color:var(--green)}.ico{width:20px;text-align:center;font-size:17px}.left-card,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px}.left-card{margin-top:22px;padding:16px}.tiny-label{color:var(--muted);font-size:10px;letter-spacing:1.5px;text-transform:uppercase}.current-space{font-size:15px;font-weight:650;margin:10px 0 5px}.muted{color:var(--muted)}.small{font-size:12px;line-height:1.65}.space-line{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:13px;border-top:1px solid var(--line);font-size:12px}.online{color:var(--green)}.main{min-width:0}.page{display:none}.page.active{display:block}.heading{display:flex;justify-content:space-between;align-items:flex-end;margin:3px 0 21px}.eyebrow{color:var(--green);font-size:10px;letter-spacing:2px;margin-bottom:8px}.heading h1{font-size:27px;margin:0;font-weight:650;letter-spacing:-.6px}.heading p{color:var(--muted);font-size:12px;margin:8px 0 0}.button{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:11px;font-size:12px}.button.primary{background:var(--green);color:#10150a;border-color:var(--green);font-weight:750}.button:hover{filter:brightness(1.12)}.compose{padding:17px;margin-bottom:17px}.compose-top{display:flex;gap:11px}.avatar{flex:none;width:38px;height:38px;border-radius:14px;background:#273126;color:var(--green);display:grid;place-items:center;font-weight:750;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}.compose textarea{width:100%;min-height:66px;resize:vertical;border:0;outline:0;background:transparent;color:var(--text);font-size:14px;padding:5px 0}.compose textarea::placeholder{color:#6f7a72}.compose-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:12px;border-top:1px solid var(--line)}.compose-actions{display:flex;gap:8px;align-items:center}.file-label{color:var(--muted);font-size:12px;cursor:pointer;padding:7px}.file-label input{position:absolute;width:1px;height:1px;opacity:0.01;overflow:hidden;clip-path:inset(50%)}.post{padding:18px;margin-bottom:13px}.post-head{display:flex;align-items:center;gap:10px}.post-meta{flex:1;min-width:0}.post-meta strong{font-size:13px}.post-meta small{display:block;color:var(--muted);font-size:11px;margin-top:4px}.tag{font-size:10px;color:var(--green);border:1px solid #43512b;padding:4px 7px;border-radius:6px}.post-text{font-size:14px;line-height:1.8;margin:15px 0;white-space:pre-wrap;overflow-wrap:anywhere}.post-image{width:100%;max-height:380px;object-fit:cover;border-radius:12px;margin-bottom:12px}.post-actions{display:flex;gap:9px;border-top:1px solid var(--line);padding-top:12px}.action{border:0;background:transparent;color:var(--muted);font-size:12px;padding:6px 9px;border-radius:8px}.action:hover{background:var(--panel2);color:var(--text)}.action.liked{color:var(--green)}.action.waved{color:var(--green);background:#202a17}.like-pair{display:flex;gap:3px;align-items:center;flex-wrap:wrap}.action.private-like{border:1px solid #3a4439;border-radius:8px}.action.private-like.liked{border-color:var(--green);background:#202a17;color:var(--green)}.profile-modal-backdrop{position:fixed;inset:0;background:#000b;z-index:40;display:none;align-items:center;justify-content:center;padding:18px}.profile-modal-backdrop.open{display:flex}.profile-modal{width:min(100%,390px);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 20px 80px #0009}.profile-modal .big-avatar{width:88px;height:88px;border-radius:28px;font-size:30px;margin:4px auto 14px;cursor:zoom-in}.profile-modal h2{text-align:center;margin:0 0 7px}.profile-modal .profile-bio{text-align:center;color:var(--muted);font-size:13px;line-height:1.7;overflow-wrap:anywhere;min-height:22px}.profile-modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.profile-modal-actions button{flex:1;min-width:100px}.chat-person .avatar{cursor:pointer;flex:none}.chat-person .chat-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.right .card{padding:16px;margin-bottom:14px}.right-title{font-size:13px;font-weight:650;margin-bottom:13px}.space-art{height:94px;border-radius:12px;background:linear-gradient(125deg,#202b1d,#0c100d 65%);padding:13px;display:flex;flex-direction:column;justify-content:space-between}.space-art b{font-size:18px;letter-spacing:1px}.space-art span{font-size:10px;color:var(--green);letter-spacing:2px}.person{display:flex;align-items:center;gap:9px;margin:12px 0}.person .avatar{width:33px;height:33px;border-radius:11px;font-size:12px}.person .name{font-size:12px;flex:1}.person .name small{display:block;color:var(--muted);margin-top:4px;font-size:10px}.mini-wave{border:1px solid #3d4a2c;color:var(--green);background:transparent;border-radius:8px;padding:6px 8px;font-size:10px}.empty{padding:35px 20px;text-align:center;color:var(--muted);font-size:13px}.profile-hero{padding:24px;margin-bottom:16px;display:flex;align-items:center;gap:16px}.profile-hero .avatar{width:60px;height:60px;font-size:20px;border-radius:20px}.profile-hero h2{margin:0 0 6px;font-size:19px}.field{display:grid;gap:8px;margin:14px 0}.field label{font-size:12px;color:var(--muted)}.field input,.field textarea{width:100%;background:#0b0e0c;border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text)}.space-detail{padding:22px}.space-detail h2{margin:10px 0;font-size:24px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.stat{background:#0b0e0c;border:1px solid var(--line);border-radius:12px;padding:13px}.stat b{font-size:20px;display:block}.stat span{font-size:10px;color:var(--muted)}.qr-poster{width:230px;max-width:100%;padding:14px;background:#f4f5ef;border-radius:14px;color:#111;display:flex;flex-direction:column;align-items:center;gap:10px}.qr-real{width:190px;min-height:190px;background:#fff;display:grid;place-items:center}.qr-real img,.qr-real canvas{max-width:100%;height:auto}.qr-brand{text-align:center;width:100%;border-top:1px solid #cfd3c8;padding-top:10px}.qr-brand b{font-size:14px;letter-spacing:1px}.qr-brand b span{color:#52751c}.qr-brand small{display:block;font-size:9px;color:#555;margin-top:5px;letter-spacing:.5px}.qr-brand p{font-size:12px;font-weight:700;margin:8px 0 2px}.delete-post{margin-left:auto;color:var(--red)!important}.qr-wrap{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line);padding-top:20px;margin-top:20px}.qr{width:110px;height:110px;background:#f3f4ef;padding:8px;display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);gap:2px;border-radius:4px;flex:none}.qr i{background:#111}.qr i:nth-child(3n),.qr i:nth-child(7n+1){background:#f3f4ef}.chat-layout{display:grid;grid-template-columns:170px 1fr;min-height:430px;overflow:hidden}.chat-list{border-right:1px solid var(--line);padding:10px}.chat-person{display:flex;align-items:center;gap:8px;padding:11px 8px;border-radius:10px;cursor:pointer;font-size:12px}.chat-person.active,.chat-person:hover{background:#1a211b}.inbox-label{font-size:10px;color:var(--muted);letter-spacing:1px;padding:8px 8px 10px}.inbox-copy{min-width:0;flex:1}.inbox-name{display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:12px}.inbox-preview{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:5px;max-width:145px}.inbox-time{font-size:9px;color:#788278;margin-top:4px}.unread-count{display:inline-grid;place-items:center;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:var(--green);color:#10150a;font-size:9px}.chat-box{display:flex;flex-direction:column;min-height:430px}.chat-top{padding:15px;border-bottom:1px solid var(--line);font-size:13px}.messages{flex:1;padding:15px;display:flex;flex-direction:column;gap:10px;max-height:340px;overflow:auto}.bubble{max-width:78%;padding:10px 12px;border-radius:13px;background:#202622;font-size:12px;line-height:1.6;align-self:flex-start;overflow-wrap:anywhere}.bubble.mine{align-self:flex-end;background:#c7ff45;color:#11170a}.chat-send{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.chat-send input{flex:1;min-width:0;background:#0b0e0c;border:1px solid var(--line);border-radius:10px;padding:11px;color:white}.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#e7ffd0;color:#12170d;padding:11px 16px;border-radius:12px;font-size:12px;font-weight:650;z-index:20;box-shadow:0 8px 30px #0008;display:none}.bottom-nav{display:none}.footer-note{color:#69746c;font-size:10px;line-height:1.6;margin-top:18px}.danger{color:var(--red)}@media(max-width:900px){.layout{grid-template-columns:190px minmax(0,1fr)}.right{display:none}}@media(max-width:620px){.app{padding:0 13px 95px}.top{height:65px}.layout{display:block;padding-top:20px}.left{display:none}.heading h1{font-size:24px}.space-pill{font-size:11px}.bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:10;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));background:#0b0e0cf2;border-top:1px solid var(--line);backdrop-filter:blur(18px)}.bottom-nav button{border:0;background:transparent;color:var(--muted);font-size:10px;display:grid;gap:4px;justify-items:center;padding:5px 9px}.bottom-nav button span{font-size:18px}.bottom-nav button.active{color:var(--green)}.heading{align-items:center}.heading p{max-width:250px}.compose,.post{padding:14px}.qr-wrap{align-items:flex-start;flex-direction:column}.chat-layout{grid-template-columns:105px 1fr}.chat-list{padding:5px}.chat-person{padding:10px 4px;gap:5px;font-size:10px}.chat-person .avatar{width:27px;height:27px}.stats{gap:6px}.stat{padding:10px 8px}.stat b{font-size:17px}}
+
+.feature-hub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.feature-tile{border:1px solid var(--line);background:#0b0e0c;border-radius:12px;padding:13px}.feature-tile b{display:block;font-size:13px}.feature-tile p{font-size:11px;color:var(--muted);line-height:1.6;margin:7px 0}.feature-tile button{margin-top:4px}.choice-grid,.feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choice{display:grid;gap:7px;text-align:left;background:#0b0e0c;color:var(--text);border:1px solid var(--line);padding:14px;border-radius:12px}.choice small{color:var(--muted);line-height:1.5}.choice.selected{border-color:var(--green);background:#182116}.feature-option{display:flex;align-items:flex-start;gap:9px;padding:11px;border:1px solid var(--line);border-radius:11px;background:#0b0e0c;font-size:12px}.feature-option input{accent-color:var(--green);margin-top:2px}.feature-option small{display:block;color:var(--muted);margin-top:4px;line-height:1.4}.field select{width:100%;background:#0b0e0c;border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text)}.config-result{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.qr-real{width:150px;flex:none}.qr-real img{width:150px;height:150px;background:white;padding:5px;border-radius:8px;object-fit:contain}.url-link{color:var(--green);font-size:12px;overflow-wrap:anywhere}.feature-disabled{display:none!important}.config-result[hidden]{display:none}.bottom-nav button{flex:1;padding-left:2px;padding-right:2px}@media(max-width:620px){.choice-grid,.feature-grid{grid-template-columns:1fr}.bottom-nav button{font-size:9px}}
+#gate{position:fixed;inset:0;z-index:100;background:var(--bg);overflow:auto;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}#gate[hidden]{display:none}.gwrap{max-width:460px;margin:auto;padding:22px 20px 60px}.gwrap input{width:100%;background:#0c0f0d;border:1px solid var(--line);border-radius:12px;padding:12px;margin:6px 0;color:var(--text)}.gwrap a{color:var(--green)}.row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}#toast{z-index:200!important}
+.inbox-section-title{font-size:11px;color:var(--muted);letter-spacing:.7px;padding:13px 5px 9px}.inbox-row{display:flex;align-items:center;gap:12px;padding:13px 7px;border-top:1px solid var(--line);cursor:pointer;border-radius:10px}.inbox-row:first-child{border-top:0}.inbox-row:hover{background:#171c19}.inbox-row .avatar{width:44px;height:44px;border-radius:15px}.inbox-row-main{flex:1;min-width:0}.inbox-row-title{display:flex;align-items:center;gap:8px;justify-content:space-between;font-size:13px}.inbox-row-preview{font-size:12px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.inbox-row-time{font-size:10px;color:var(--muted);white-space:nowrap}.inbox-row .unread-count{flex:none}.inbox-row .start-label{font-size:11px;color:var(--green);white-space:nowrap}@media(max-width:620px){.chat-layout{grid-template-columns:1fr}.chat-layout .chat-list{display:none}.messages{max-height:none;min-height:45vh}}
+
+ .avatar-picker{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:14px}.avatar-option{height:48px;border:1px solid var(--line);border-radius:13px;background:#0b0e0c;font-size:25px}.avatar-option.active{border-color:var(--green);background:#202a17;box-shadow:0 0 0 1px var(--green)}@media(max-width:420px){.avatar-picker{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.avatar-click{border:0;cursor:pointer;transition:transform .15s,filter .15s}.avatar-click:hover{filter:brightness(1.2);transform:translateY(-1px)}.profile-name-click{cursor:pointer}.profile-name-click:hover{color:var(--green)}.inbox-row-avatar{margin-right:0}.private-like-list{display:grid;gap:10px;margin-top:14px;max-height:55vh;overflow:auto}.private-like-person{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px}.private-like-person .name{flex:1;min-width:0;font-size:13px}.private-like-person .name small{display:block;color:var(--muted);margin-top:4px;font-size:11px}.profile-modal-backdrop.secondary-modal{z-index:42}.message-retracted{opacity:.65;font-style:italic}.message-actions{display:flex;justify-content:flex-end;margin-top:4px}.message-retract{border:0;background:transparent;color:#b6c3b8;padding:2px 4px;font-size:10px}.message-retract:hover{color:var(--red)}
+ .privacy-setting{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}.privacy-setting small{display:block;color:var(--muted);font-size:11px;margin-top:5px;line-height:1.6}.privacy-setting input{width:21px;height:21px;accent-color:var(--green)}.like-view{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.like-view .button{font-size:11px}.message-tabs{display:flex;gap:9px;margin:0 0 14px}.message-tabs button{flex:1;display:flex;justify-content:center;align-items:center;gap:6px}.notification-post{margin-top:8px;border-left:2px solid var(--line);padding:6px 10px;color:var(--muted);font-size:12px;overflow-wrap:anywhere}.like-notice{display:flex;gap:11px;align-items:flex-start;border-top:1px solid var(--line);padding:15px 3px}.like-notice:first-child{border-top:none}.like-notice.unseen{background:#c7ff450a}.like-notice-body{flex:1;min-width:0;font-size:13px}.like-notice-top{display:flex;align-items:center;justify-content:space-between;gap:6px}.notice-kind{font-size:10px;color:var(--green)}.notice-dot{width:7px;height:7px;background:var(--green);border-radius:99px;display:inline-block}.nav-unread{min-width:16px;padding:1px 4px;background:var(--green);color:#10150a;border-radius:99px;font-size:9px;margin-left:4px} [hidden]{display:none!important}.dm-media-preview{margin:0 12px 4px;padding:9px 12px;background:#172019;border:1px solid #334131;border-radius:11px;color:var(--text);font-size:12px;display:flex;gap:9px;align-items:center;justify-content:space-between;overflow-wrap:anywhere}.dm-media-preview[hidden]{display:none!important}.dm-media-preview button{background:transparent;border:0;color:var(--green);cursor:pointer}.dm-attach{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}.dm-img{display:block;width:auto;max-width:min(100%,300px);max-height:300px;border-radius:9px;margin-top:5px;object-fit:contain}.dm-video{display:block;width:min(100%,320px);max-height:350px;border-radius:9px;margin-top:5px}.dm-upload-note{font-size:11px;color:var(--muted);padding:0 12px 6px}@media(max-width:620px){.dm-attach{font-size:11px;padding:10px 7px}.chat-send{gap:5px;padding:8px}}
+
+/* SAME PLACE: responsive DM media safety patch (2026-10-18)
+   Keep intrinsic image/video sizes from forcing the grid or flex cells wider.
+   No changes to authentication, data fetching, or media permissions. */
+.chat-layout{grid-template-columns:170px minmax(0,1fr);max-width:100%;min-width:0}
+.chat-layout .chat-list,.chat-layout .chat-box,.chat-layout .messages{min-width:0;max-width:100%}
+.chat-layout .messages{overflow-x:hidden;overscroll-behavior-x:contain}
+.chat-layout .bubble{box-sizing:border-box;min-width:0;width:fit-content;max-width:85%;overflow-wrap:anywhere;word-break:break-word}
+.chat-layout .bubble a:has(> .dm-img){display:block;max-width:100%;min-width:0}
+.chat-layout .dm-img,.chat-layout .dm-video{display:block;width:auto;max-width:100%;height:auto;max-height:min(52vh,440px);object-fit:contain;border-radius:9px}
+.chat-layout .dm-video{height:auto;aspect-ratio:auto}
+.chat-layout .chat-send{min-width:0;max-width:100%}
+.chat-layout .chat-send input:not([type=file]){min-width:0;width:0;flex:1 1 0}
+@media(max-width:900px) and (min-width:621px){
+ .chat-layout{grid-template-columns:145px minmax(0,1fr)}
+ .chat-layout .bubble{max-width:94%}
+}
+@media(max-width:620px){
+ .chat-layout{grid-template-columns:minmax(0,1fr)}
+ .chat-layout .bubble{max-width:94%}
+ .chat-layout .dm-img,.chat-layout .dm-video{max-height:50vh}
+}
+
+/* SAME PLACE — reversible, viewport-filling private chat (no data or API changes). */
+.dm-chat-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.dm-chat-toolbar #chatTitle{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dm-size-toggle{flex:none;white-space:nowrap;padding:7px 11px;color:var(--green);border-color:#465a32}
+#page-chat.dm-expanded{position:fixed;inset:0;z-index:35;display:flex;flex-direction:column;background:var(--bg);padding:clamp(10px,2vw,24px);padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom));overflow:hidden}
+#page-chat.dm-expanded>.heading{flex:none;margin:0 0 12px;align-items:center}
+#page-chat.dm-expanded>.heading h1{font-size:22px}
+#page-chat.dm-expanded>.heading p{display:none}
+#page-chat.dm-expanded>.chat-layout{flex:1 1 auto;min-height:0;height:auto;max-height:none;width:100%;grid-template-columns:clamp(185px,23vw,280px) minmax(0,1fr)}
+#page-chat.dm-expanded .chat-list{min-height:0;overflow-y:auto}
+#page-chat.dm-expanded .chat-box{min-height:0;height:100%;overflow:hidden}
+#page-chat.dm-expanded .messages{flex:1 1 auto;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden}
+#page-chat.dm-expanded .bubble{max-width:min(78%,700px)}
+#page-chat.dm-expanded .dm-img,#page-chat.dm-expanded .dm-video{max-width:100%;max-height:min(57vh,650px)}
+#page-chat.dm-expanded .chat-send{flex:none}
+#page-chat.dm-expanded>.footer-note{display:none}
+body.dm-expanded-lock{overflow:hidden}
+@media(max-width:620px){
+ #page-chat.dm-expanded{padding:10px 10px max(12px,env(safe-area-inset-bottom))}
+ #page-chat.dm-expanded>.heading{margin-bottom:8px}
+ #page-chat.dm-expanded>.heading h1{font-size:20px}
+ #page-chat.dm-expanded>.heading .eyebrow{display:none}
+ #page-chat.dm-expanded>.chat-layout{grid-template-columns:minmax(0,1fr)}
+ #page-chat.dm-expanded .chat-list{display:none}
+ #page-chat.dm-expanded .bubble{max-width:95%}
+ #page-chat.dm-expanded .dm-img,#page-chat.dm-expanded .dm-video{max-height:55vh}
+}
+@media(prefers-reduced-motion:no-preference){.dm-size-toggle{transition:border-color .15s,background .15s}}
+
+/* SAME PLACE · 安装到主屏幕引导（仅 UI；不代表后台推送已经启用） */
+.sp-install-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;margin:0 0 15px;border:1px solid #3f5630;background:linear-gradient(115deg,#1b2919,#101713);border-radius:15px}
+.sp-install-copy{min-width:0}.sp-install-copy strong{display:block;font-size:13px;margin-bottom:5px}.sp-install-copy p{margin:0;font-size:11px;color:#b4c0b4;line-height:1.65}.sp-install-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.sp-install-actions button{white-space:nowrap}
+.sp-install-dismiss{border:0;background:transparent;color:#9ca99c;padding:6px;font-size:16px}
+.sp-guide-mask{position:fixed;inset:0;z-index:85;background:#000c;display:none;align-items:center;justify-content:center;padding:18px}.sp-guide-mask.open{display:flex}
+.sp-guide{width:min(100%,450px);max-height:min(85vh,720px);overflow:auto;border-radius:20px;border:1px solid #394a35;background:#111713;padding:22px;box-shadow:0 18px 60px #0009}
+.sp-guide-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.sp-guide-head h2{font-size:19px;margin:0}.sp-guide-steps{padding-left:22px;color:#e8ece6;font-size:13px;line-height:1.95}.sp-guide-steps li{margin:7px 0}.sp-guide-note{font-size:12px;line-height:1.75;color:#acb8ac;border-top:1px solid #354135;padding-top:12px}
+@media(max-width:680px){.sp-install-card{align-items:stretch;flex-direction:column}.sp-install-actions{justify-content:flex-start}}
+</style><link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#080a09"><style>
+.sp-dm-alerts{position:fixed;top:90px;right:18px;z-index:90;width:min(365px,calc(100vw - 36px));display:grid;gap:9px;pointer-events:none}
+.sp-dm-alert{pointer-events:auto;background:#19221a;border:1px solid #718f35;border-radius:15px;padding:13px 14px;color:#f1f4f1;box-shadow:0 13px 40px #0009;display:flex;gap:10px;align-items:start}
+.sp-dm-alert strong{display:block;color:#c7ff45;font-size:13px}.sp-dm-alert p{font-size:12px;margin:6px 0;color:#c5d0c5}.sp-dm-alert button{border:1px solid #526b32;background:#202b1d;color:#e9ffe3;border-radius:8px;padding:7px 10px;font-size:11px;cursor:pointer}
+.sp-push-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}.sp-push-controls p{flex-basis:100%;margin:1px 0}.sp-push-check{display:flex;gap:7px;align-items:center;width:100%;font-size:12px;color:#c7d0c8;padding-top:8px}.sp-push-check input{accent-color:#c7ff45}
+@media(max-width:680px){.sp-dm-alerts{top:74px;right:9px}}
+</style></head><body>
+<div id="gate"><div class="gwrap"><p class="muted">加载中…</p></div></div>
+<div class="app"><header class="top"><div class="brand"><div class="logo">同</div><div><strong>同场 SAME PLACE</strong><small>REAL PLACES, REAL CONNECTIONS</small></div></div><button class="space-pill" onclick="showPage('space')"><i class="dot"></i><span id="topSpace">倒倒满 DODMAN</span><span>⌄</span></button><button class="button" onclick="home()">切换空间</button></header>
+<div class="layout"><aside class="left"><nav class="nav"><button class="active" data-page="feed" onclick="showPage('feed')"><span class="ico">◫</span>空间动态</button><button data-page="waves" onclick="showPage('waves')"><span class="ico">↗</span>收到的 Wave</button><button data-page="messages" onclick="showPage('messages')"><span class="ico">◌</span>消息中心 <b class="nav-unread" hidden></b></button><button data-page="space" onclick="showPage('space')"><span class="ico">⌂</span>当前空间</button><button data-page="profile" onclick="showPage('profile')"><span class="ico">◎</span>我的身份</button><button data-page="setup" onclick="showPage('setup')"><span class="ico">⚙</span>空间配置</button><button data-page="admin" style="display:none" onclick="showPage('admin')"><span class="ico">⚑</span>管理后台</button></nav><div class="left-card"><div class="tiny-label">CURRENT SPACE</div><div class="current-space" id="sideSpace">倒倒满 DODMAN</div><div class="small muted">你正在浏览这个地点的专属动态。</div><div class="space-line"><span>空间状态</span><span class="online">● 开放中</span></div></div><div class="footer-note">同一个地点，让相遇不必从开口开始。<br>云端版 · 数据同步到服务器</div></aside>
+<main class="main">
+<section id="page-feed" class="page active"><div class="heading"><div><div class="eyebrow">SPACE FEED / 01</div><h1>空间动态</h1><p>在同一个地方，留下此刻的你。</p></div><button class="button" onclick="showPage('space')">空间信息 ↗</button></div>
+<div class="card compose"><div class="compose-top"><div class="avatar" id="composeAvatar">S</div><textarea id="postText" maxlength="500" placeholder="此刻在这里，你想说点什么？"></textarea></div><div id="imagePreview"></div><div class="compose-bottom"><div class="compose-actions"><label class="file-label">＋ 添加照片<input type="file" id="postImage" accept="image/*" onchange="previewImage(event)"></label><span class="muted" style="font-size:11px">仅对本空间可见</span></div><button class="button primary" onclick="publishPost()">发布动态</button></div></div><div id="feedPosts"></div></section>
+<section id="page-waves" class="page"><div class="heading"><div><div class="eyebrow">SOCIAL SIGNAL / 02</div><h1>Wave</h1><p>不用立刻说话，先轻轻打个招呼。</p></div></div><div class="card" style="padding:18px"><div class="right-title">收到的 Wave</div><div id="waveList"></div></div><div class="card" style="padding:18px;margin-top:14px"><div class="right-title">空间里的人</div><div id="peopleList"></div><p class="small muted">Wave 是轻量的兴趣信号。真实上线后，只有双方同意或触发匹配规则，才会进一步建立联系。</p></div></section>
+<section id="page-messages" class="page"><div class="heading"><div><div class="eyebrow">YOUR MESSAGES / 03</div><h1>消息中心 <span id="messageHeadingBadge" class="unread-count" hidden>0</span></h1><p>点赞通知和私聊消息，都在这里。</p></div><button class="button" onclick="refreshInbox()">刷新</button></div><div class="sp-install-card" id="spInstallHint" hidden><div class="sp-install-copy"><strong>⌂ 把同场放到主屏幕</strong><p>下次一键打开同场。想要接收设备消息提醒？先了解安装步骤与通知条件。</p></div><div class="sp-install-actions"><button type="button" class="button primary" onclick="openSPInstallGuide()">查看教程 ↗</button><button type="button" class="sp-install-dismiss" aria-label="暂时关闭提示" onclick="dismissSPInstallHint()">✕</button></div></div><div class="message-tabs"><button id="tabLike" class="button primary" onclick="switchMessageTab('likes')">♡ 点赞通知 <span id="likeBadge" class="unread-count" hidden></span></button><button id="tabChat" class="button" onclick="switchMessageTab('chat')">◌ 私聊消息 <span id="chatBadge" class="unread-count" hidden></span></button></div><div id="messageLikePanel" class="card" style="padding:8px 14px 14px;margin-bottom:14px"><div class="inbox-section-title">收到的公开赞和私密赞</div><div id="likeNotifications"><div class="empty">正在加载点赞通知…</div></div></div><div id="messageChatPanel" hidden><div class="card" style="padding:8px 14px 14px"><div class="inbox-section-title">最近对话</div><div id="inboxList"><div class="empty">正在加载消息…</div></div></div><div class="card" style="padding:8px 14px 14px;margin-top:14px"><div class="inbox-section-title">空间成员 · 开始新对话</div><div id="newConversationList"><div class="empty">正在加载成员…</div></div></div></div></section>
+<section id="page-chat" class="page"><div class="heading"><div><div class="eyebrow">PRIVATE CONNECTION / 04</div><h1>私聊</h1><p>与空间成员继续对话。</p></div><button class="button" onclick="showPage('messages')">‹ 返回消息列表</button></div><div class="card chat-layout"><div class="chat-list" id="chatList"></div><div class="chat-box"><div class="chat-top dm-chat-toolbar"><span id="chatTitle">选择一个对话</span><button type="button" class="button dm-size-toggle" id="dmSizeToggle" onclick="toggleDMExpanded()" aria-label="放大聊天窗口" aria-expanded="false" title="放大聊天窗口">⛶ 放大</button></div><div class="messages" id="messages"><div class="empty">选择左侧的人，开始对话。</div></div><div id="dmMediaPreview" class="dm-media-preview" hidden></div><div class="chat-send"><label class="button dm-attach" for="dmMediaInput" title="发送图片或视频">＋ 图片/视频</label><input type="file" id="dmMediaInput" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm" hidden onchange="chooseDMMedia(this)"><input id="chatInput" placeholder="写一条消息…" onkeydown="if(event.key==='Enter')sendMessage()"><button class="button primary" onclick="sendMessage()">发送</button></div></div></div><p class="footer-note">私聊消息保存在服务器，只有你和对方可以看到。</p></section>
+<section id="page-space" class="page"><div class="heading"><div><div class="eyebrow">PLACE PROFILE / 04</div><h1>当前空间</h1><p>每个地点拥有自己的长期房间。</p></div><div class="row2"><button class="button" onclick="home()">切换空间</button><button class="button" onclick="editSpace()">编辑空间</button></div></div><div class="card space-detail"><div class="space-art"><span>PERMANENT SPACE</span><b id="spaceArtName">倒倒满 DODMAN</b></div><h2 id="spaceName">倒倒满 DODMAN</h2><p class="muted small" id="spaceDesc">民谣 · 鸡尾酒 · 在这里遇见同频的人。</p><div id="featureHub" class="feature-hub"></div><div class="stats"><div class="stat"><b id="postCount">3</b><span>条动态</span></div><div class="stat"><b id="likeCount">12</b><span>公开点赞</span></div><div class="stat"><b id="memberCount">28</b><span>位成员</span></div></div><div class="qr-wrap"><div class="qr-poster" id="spaceQrPoster"><div class="qr-real" id="spaceQrCode"></div><div class="qr-brand"><b>SAME PLACE <span>同场</span></b><small id="spaceQrName">倒倒满 DODMAN</small><p>微信扫一扫，进入同场空间</p><small>SCAN TO ENTER · SAME PLACE</small></div></div><div><b style="font-size:14px">空间入口二维码</b><p class="small muted">扫码打开当前空间入口。保存图片后可打印张贴；请先部署到公开 HTTPS 网址再分享。</p><button class="button primary" onclick="downloadQr('space')">一键保存带同场水印的二维码</button><button class="button" style="margin-left:6px" onclick="copySpaceLink()">复制空间链接</button></div></div><div class="field"><label>空间简介</label><textarea id="spaceDescriptionInput" rows="2">民谣 · 鸡尾酒 · 在这里遇见同频的人。</textarea><button class="button primary" style="justify-self:start" onclick="saveSpaceDesc()">保存简介</button></div></div></section>
+<section id="page-setup" class="page"><div class="heading"><div><div class="eyebrow">SPACE BUILDER / 06</div><h1>创建与配置空间</h1><p>先确定场所、功能和规则，再生成绑定该空间的二维码。</p></div></div>
+<div class="card space-detail"><div class="field"><label>场所版本</label><div class="choice-grid"><button type="button" class="choice" id="chooseEducation" onclick="setVenue('education')"><b>教育场所 · Campus</b><small>学校、班级、社团、图书馆</small></button><button type="button" class="choice" id="chooseNightlife" onclick="setVenue('nightlife')"><b>娱乐场所 · Nightlife</b><small>酒吧、Livehouse、活动空间</small></button></div></div>
+<div class="field"><label>空间名称</label><input id="configSpaceName" maxlength="60" value="倒倒满 DODMAN" placeholder="例如：倒倒满 DODMAN"></div>
+<div class="field"><label>空间简介</label><textarea id="configSpaceDesc" rows="2" placeholder="简单介绍这个空间"></textarea></div>
+<div class="field"><label>开启的功能</label><div class="feature-grid" id="featureGrid"></div></div>
+<div class="field"><label>联系权限</label><select id="configPrivacy"><option value="controlled">受控联系：Wave 可用，私聊需要对方同意</option><option value="open">开放互动：允许成员直接发起私聊</option><option value="low-exposure">低曝光：默认匿名，减少个人资料展示</option></select></div>
+<div class="field"><label>动态保留策略</label><select id="configRetention"><option value="permanent">长期保留，管理员按规则管理</option><option value="temporary">限时展示，到期后归档或删除</option></select></div>
+<div class="field"><label>二维码入口</label><p class="small muted">保存配置后自动生成二维码。二维码指向当前空间入口，并附带场所类型、功能开关、隐私和保留策略。进入网页时不会申请照片或文件权限；只有点击“下载二维码图片”时，才会调用系统保存/分享界面（iPhone/iPad 可选择“存储图像”或“存储到文件”）。二维码指向本空间的固定入口地址，长期有效，不同用户扫码后看到的是同一个空间。</p></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="button primary" onclick="saveSpaceConfig()">保存配置并生成二维码</button><button class="button" onclick="resetSpaceConfigForm()">恢复默认配置</button></div>
+<div id="configResult" class="config-result" hidden><div class="qr-wrap"><div class="qr-poster"><div id="resultQrCode" class="qr-real" aria-label="空间入口二维码"></div><div class="qr-brand"><b>SAME PLACE <span>同场</span></b><small id="resultQrName">空间入口</small><p>微信扫一扫，进入同场空间</p><small>SCAN TO ENTER · SAME PLACE</small></div></div><div><b id="configResultTitle">空间配置已保存</b><p class="small muted" id="configResultSummary"></p><a id="spaceUrlLink" class="url-link" href="#" target="_blank" rel="noopener">打开空间入口 ↗</a><div style="margin-top:10px"><button class="button" onclick="downloadQr()">下载二维码图片</button></div></div></div></div>
+</div></section>
+<section id="page-profile" class="page"><div class="heading"><div><div class="eyebrow">YOUR PRESENCE / 05</div><h1>我的身份</h1><p>不必使用真实姓名，也可以自在地出现。</p></div></div><div class="card profile-hero"><button type="button" class="avatar avatar-click" id="profileAvatar" title="查看头像大图" onclick="zoomOwnAvatar()">S</button><div><h2 id="profileNameDisplay">Somewhere</h2><div class="small muted">匿名身份 · 云端账号</div><div id="ownProfileBioPreview" class="small muted" style="margin-top:6px;max-width:520px;white-space:pre-wrap;overflow-wrap:anywhere"></div></div></div><div class="card" style="padding:20px;margin-bottom:16px"><div class="right-title">选择你的头像</div><p class="small muted" style="margin-top:-5px">选一个代表你的符号，保存后会显示在你的资料和动态中。</p><div class="avatar-picker" id="avatarPicker" role="group" aria-label="选择头像"><button type="button" class="avatar-option" data-avatar="🌙" onclick="chooseAvatar('🌙')" aria-label="选择头像 🌙">🌙</button><button type="button" class="avatar-option" data-avatar="🌿" onclick="chooseAvatar('🌿')" aria-label="选择头像 🌿">🌿</button><button type="button" class="avatar-option" data-avatar="☁️" onclick="chooseAvatar('☁️')" aria-label="选择头像 ☁️">☁️</button><button type="button" class="avatar-option" data-avatar="⭐" onclick="chooseAvatar('⭐')" aria-label="选择头像 ⭐">⭐</button><button type="button" class="avatar-option" data-avatar="🪐" onclick="chooseAvatar('🪐')" aria-label="选择头像 🪐">🪐</button><button type="button" class="avatar-option" data-avatar="🌊" onclick="chooseAvatar('🌊')" aria-label="选择头像 🌊">🌊</button><button type="button" class="avatar-option" data-avatar="🦋" onclick="chooseAvatar('🦋')" aria-label="选择头像 🦋">🦋</button><button type="button" class="avatar-option" data-avatar="🐈" onclick="chooseAvatar('🐈')" aria-label="选择头像 🐈">🐈</button><button type="button" class="avatar-option" data-avatar="🐼" onclick="chooseAvatar('🐼')" aria-label="选择头像 🐼">🐼</button><button type="button" class="avatar-option" data-avatar="🍀" onclick="chooseAvatar('🍀')" aria-label="选择头像 🍀">🍀</button><button type="button" class="avatar-option" data-avatar="🎧" onclick="chooseAvatar('🎧')" aria-label="选择头像 🎧">🎧</button><button type="button" class="avatar-option" data-avatar="🖤" onclick="chooseAvatar('🖤')" aria-label="选择头像 🖤">🖤</button></div><div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="button" for="avatarPhotoInput">从相册选择照片</label><input id="avatarPhotoInput" type="file" accept="image/*" onchange="chooseAvatarPhoto(this)" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><button type="button" class="button" onclick="removeAvatarPhoto()">恢复符号头像</button><span class="small muted">支持从手机相册选取</span></div></div><div class="card" style="padding:20px"><div class="field"><label>匿名昵称</label><input id="nicknameInput" maxlength="20" placeholder="输入一个昵称"></div><div class="field"><label>个人介绍（选填）</label><textarea id="bioInput" maxlength="200" rows="4" placeholder="介绍一下你自己：兴趣、喜欢的音乐，或者你希望别人了解你的事……" style="resize:vertical;min-height:100px;line-height:1.7"></textarea><div class="small muted">最多 200 字。保存后，其他人点击你的头像时可以看到。</div></div><button class="button primary" onclick="saveProfile()">保存身份</button><div style="border-top:1px solid var(--line);margin-top:22px;padding-top:18px"><div class="right-title">快捷打开与消息提醒</div><div class="sp-push-controls"><p class="small muted">新私聊到达时显示站内提醒。安装到主屏幕后，还可以开启设备推送（需管理员完成后台部署）。</p><button type="button" class="button primary" onclick="spEnablePush()">🔔 开启设备通知</button> <button type="button" class="button" onclick="spDisablePush()">关闭本设备通知</button><label class="sp-push-check"><input type="checkbox" id="spQuiet" onchange="spSetQuiet(this.checked)"> 本设备免打扰（关闭站内提醒与本设备推送）</label><p id="spPushStatus" class="small muted" role="status">尚未检查设备通知状态</p></div><p class="small muted">将同场添加到手机或 iPad 主屏幕，像 App 一样快速进入。</p><button type="button" class="button" onclick="openSPInstallGuide()">查看添加到主屏幕教程 ↗</button><p class="small muted">安装到主屏幕后，需关闭免打扰并点击「开启设备通知」授权；实际送达仍需测试。</p><div style="border-top:1px solid var(--line);margin:18px 0"></div><div class="right-title">隐私与数据</div><label class="privacy-setting"><span><b>允许其他人私聊我</b><small>关闭后，所有空间的其他用户都不能给你发送新消息。</small></span><input type="checkbox" id="allowDM" onchange="saveDMPrivacy(this.checked)"></label><div style="margin-top:18px"><div class="right-title">我的点赞记录</div><button class="button" onclick="openMyLikes()">查看收到的公开赞 / 私密赞 / 我发出的赞 ↗</button></div><p class="small muted">你的资料和动态保存在云端账号中，换设备登录后仍然存在。</p><button class="button danger" onclick="logout()">退出登录</button></div></div></section>
+<section id="page-admin" class="page"><div class="heading"><div><div class="eyebrow">MODERATION / 07</div><h1>管理后台</h1><p>处理举报、管理成员。</p></div></div><div class="card" style="padding:18px"><div class="right-title">举报队列</div><div id="reportList"></div></div><div class="card" style="padding:18px;margin-top:14px"><div class="right-title">空间成员</div><div id="memberAdmin"></div></div></section>
+</main>
+<div id="likesOverviewModal" class="profile-modal-backdrop secondary-modal" onclick="if(event.target===this)this.classList.remove('open')"><div class="profile-modal" role="dialog" aria-modal="true" style="max-height:85vh;overflow:auto"><button class="button" style="float:right" onclick="document.getElementById('likesOverviewModal').classList.remove('open')">✕</button><h2 style="text-align:left">我的点赞记录</h2><div id="likesOverviewBody"></div></div></div><div id="privateLikesModal" class="profile-modal-backdrop secondary-modal" onclick="if(event.target===this)closePrivateLikes()"><div class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="privateLikesTitle"><button class="button" style="float:right" onclick="closePrivateLikes()" aria-label="关闭">✕</button><h2 id="privateLikesTitle" style="text-align:left;margin:0 0 8px">私密赞</h2><p class="small muted">只有这条动态的发布者能查看名单，其他空间成员看不到。</p><div id="privateLikesList" class="private-like-list"><div class="empty">正在加载…</div></div></div></div>
+<div id="memberProfileModal" class="profile-modal-backdrop" onclick="if(event.target===this)closeMemberProfile()"><div class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="memberModalName"><button class="button" style="float:right" onclick="closeMemberProfile()" aria-label="关闭">✕</button><div id="memberModalAvatar" class="avatar big-avatar" title="查看头像大图" onclick="zoomMemberAvatar()">同</div><h2 id="memberModalName">成员主页</h2><div id="memberModalBio" class="profile-bio"></div><div id="memberModalHint" class="small muted" style="text-align:center;margin-top:8px">同场空间成员</div><div class="profile-modal-actions"><button class="button" id="memberModalViewAvatar" onclick="viewMemberAvatar()">查看头像</button><button class="button primary" id="memberModalChat" onclick="chatFromProfile()">进入私聊</button><button class="button" id="memberModalBlock" onclick="toggleBlockFromProfile()">屏蔽</button></div></div></div>
+<aside class="right"><div class="card"><div class="right-title">正在发生的地方</div><div class="space-art"><span>YOUR SPACE</span><b id="rightSpaceName">DODMAN</b></div><p class="small muted" style="margin:12px 0">固定地点 · 持续存在<br>不是限时匹配房间。</p><button class="button" style="width:100%" onclick="showPage('space')">查看空间详情</button></div><div class="card"><div class="right-title">你可能想认识</div><div id="rightPeople"></div><button class="button" style="width:100%" onclick="showPage('waves')">查看全部</button></div><div class="card"><div class="right-title">设计原则</div><div class="small muted" style="line-height:1.9">01 不强迫主动搭讪<br>02 匿名参与<br>03 空间之间相互隔离<br>04 动态长期保留<br>05 轻量信号再到私聊</div></div></aside></div></div>
+<div id="spInstallGuide" class="sp-guide-mask" role="presentation" onclick="if(event.target===this)closeSPInstallGuide()"><section class="sp-guide" role="dialog" aria-modal="true" aria-labelledby="spGuideTitle"><div class="sp-guide-head"><h2 id="spGuideTitle">⌂ 添加同场到主屏幕</h2><button type="button" class="button" onclick="closeSPInstallGuide()" aria-label="关闭教程">✕</button></div><div id="spGuideSteps"></div><p class="sp-guide-note">添加后可更快捷地打开同场。设备级后台消息推送需要同场上线 Web Push 服务、用户允许通知，并受浏览器与系统设置限制；目前此教程不代表推送已启用。</p><button type="button" class="button primary" onclick="closeSPInstallGuide()" style="width:100%">知道了</button></section></div>
+<nav class="bottom-nav"><button class="active" data-page="feed" onclick="showPage('feed')"><span>◫</span>动态</button><button data-page="waves" onclick="showPage('waves')"><span>↗</span>Wave</button><button data-page="messages" onclick="showPage('messages')"><span>◌</span>消息<b class="nav-unread" hidden></b></button><button data-page="space" onclick="showPage('space')"><span>⌂</span>空间</button><button data-page="profile" onclick="showPage('profile')"><span>◎</span>我的</button><button data-page="setup" onclick="showPage('setup')"><span>⚙</span>配置</button><button data-page="admin" style="display:none" onclick="showPage('admin')">⚑管理</button></nav><div class="toast" id="toast"></div>
+<script>
+const seedPosts=[{id:1,name:'慢半拍',time:'刚刚',text:'一个人来听歌也很好。坐在靠近音箱的位置，今天的歌单意外地合胃口。',likes:8,liked:false,waves:0,image:''},{id:2,name:'夜航',time:'18 分钟前',text:'有没有人也喜欢这种不需要一直说话的氛围。音乐在放，各自待着也不尴尬。',likes:3,liked:false,waves:0,image:''},{id:3,name:'纸月亮',time:'昨天',text:'把这首歌留在这里。希望今晚路过的人也能听到。',likes:1,liked:false,waves:0,image:''}];
+const people=[{id:'p1',name:'慢半拍',initial:'慢',desc:'刚刚发布了动态'},{id:'p2',name:'夜航',initial:'夜',desc:'喜欢现场音乐'},{id:'p3',name:'纸月亮',initial:'月',desc:'在这里待了一会儿'}];let state={nickname:'Somewhere',bio:'',space:'倒倒满 DODMAN',desc:'民谣 · 鸡尾酒 · 在这里遇见同频的人。',posts:seedPosts,waves:[],chats:{},activeChat:'p1',imageDraft:'',config:{venue:'nightlife',spaceName:'倒倒满 DODMAN',desc:'民谣 · 鸡尾酒 · 在这里遇见同频的人。',features:['feed','likes','wave','events','announcements'],privacy:'controlled',retention:'permanent',saved:false}};
+const FEATURE_DEFS=[{id:'feed',label:'空间动态',desc:'发布文字与照片'},{id:'likes',label:'点赞与投票',desc:'对动态表达反馈'},{id:'wave',label:'Wave 社交信号',desc:'轻量表达兴趣'},{id:'dm',label:'私聊',desc:'空间成员私下沟通'},{id:'study',label:'学习搭子',desc:'学习、自习和运动组队'},{id:'lost',label:'失物招领',desc:'发布寻找或拾获信息'},{id:'events',label:'活动与报名',desc:'活动信息和参与登记'},{id:'music',label:'歌单与点歌',desc:'歌曲推荐和投票'},{id:'announcements',label:'场所公告',desc:'管理员发布公告'}];
+function ensureConfig(){if(!state.config)state.config={venue:'nightlife',spaceName:state.space||'倒倒满 DODMAN',desc:state.desc||'',features:['feed','likes','wave','events','announcements'],privacy:'controlled',retention:'permanent',saved:false};state.config.features=Array.isArray(state.config.features)?state.config.features:[];}
+function loadConfigForm(){ensureConfig();const c=state.config;document.getElementById('configSpaceName').value=c.spaceName||state.space;document.getElementById('configSpaceDesc').value=c.desc||state.desc;document.getElementById('configPrivacy').value=c.privacy||'controlled';document.getElementById('configRetention').value=c.retention||'permanent';document.getElementById('chooseEducation').classList.toggle('selected',c.venue==='education');document.getElementById('chooseNightlife').classList.toggle('selected',c.venue!=='education');renderFeatureOptions();if(c.saved)showConfigResult();}
+function setVenue(venue){ensureConfig();state.config.venue=venue;const allowed=venue==='education'?['feed','likes','study','lost','events','announcements']:['feed','likes','wave','dm','events','music','announcements'];state.config.features=state.config.features.filter(x=>allowed.includes(x));allowed.forEach(x=>{if(!state.config.features.includes(x)&&['feed','likes','events','announcements'].includes(x))state.config.features.push(x)});document.getElementById('chooseEducation').classList.toggle('selected',venue==='education');document.getElementById('chooseNightlife').classList.toggle('selected',venue==='nightlife');renderFeatureOptions();document.getElementById('configResult').hidden=true;}
+function renderFeatureOptions(){ensureConfig();const venue=state.config.venue;const allowed=FEATURE_DEFS.filter(f=>venue==='education'?f.id!=='music'&&f.id!=='wave':f.id!=='study'&&f.id!=='lost');const root=document.getElementById('featureGrid');root.innerHTML=allowed.map(f=>`<label class="feature-option"><input type="checkbox" value="${f.id}" ${state.config.features.includes(f.id)?'checked':''} onchange="toggleFeature('${f.id}',this.checked)"><span><b>${f.label}</b><small>${f.desc}</small></span></label>`).join('');}
+function toggleFeature(id,on){ensureConfig();state.config.features=on?[...new Set([...state.config.features,id])]:state.config.features.filter(x=>x!==id);state.config.saved=false;}
+function resetSpaceConfigForm(){state.config={venue:'nightlife',spaceName:'倒倒满 DODMAN',desc:'民谣 · 鸡尾酒 · 在这里遇见同频的人。',features:['feed','likes','wave','events','announcements'],privacy:'controlled',retention:'permanent',saved:false};loadConfigForm();document.getElementById('configResult').hidden=true;toast('已恢复娱乐场所默认配置。');}
+function saveSpaceConfig(){ensureConfig();const name=document.getElementById('configSpaceName').value.trim();if(!name){toast('请先填写空间名称。');return}const c=state.config;c.spaceName=name;c.desc=document.getElementById('configSpaceDesc').value.trim();c.privacy=document.getElementById('configPrivacy').value;c.retention=document.getElementById('configRetention').value;c.saved=true;state.space=name;state.desc=c.desc||'一个属于此地点的空间。';save();applyFeatureGates();renderAll();showConfigResult();toast('空间配置已保存，二维码入口已生成。');}
+function buildSpaceLink(){ensureConfig();const url=new URL(window.location.href);url.searchParams.set('space',state.config.spaceName||state.space);url.searchParams.set('venue',state.config.venue);url.searchParams.set('config',JSON.stringify({venue:state.config.venue,spaceName:state.config.spaceName||state.space,desc:state.config.desc,features:state.config.features,privacy:state.config.privacy,retention:state.config.retention,saved:true}));return url.toString()}
+function showConfigResult(){ensureConfig();const c=state.config,link=buildSpaceLink();document.getElementById('configResult').hidden=false;document.getElementById('configResultTitle').textContent=c.spaceName+' · '+(c.venue==='education'?'教育场所':'娱乐场所');document.getElementById('resultQrName').textContent=c.spaceName;document.getElementById('configResultSummary').textContent=`已启用 ${c.features.length} 项功能 · ${c.privacy==='controlled'?'受控联系':c.privacy==='open'?'开放互动':'低曝光模式'} · ${c.retention==='permanent'?'长期保留':'限时展示'}`;document.getElementById('spaceUrlLink').href=link;document.getElementById('spaceUrlLink').textContent=link;generateQr('resultQrCode',link);}
+function generateQr(targetId,link){const root=document.getElementById(targetId);if(!root)return;root.innerHTML='';if(!window.QRCode){root.innerHTML='<p class="small muted">二维码组件加载中，请稍后重试。</p>';return}new QRCode(root,{text:link,width:190,height:190,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});}
+function drawWatermarkedQr(targetId,link){return new Promise((resolve,reject)=>{const temp=document.createElement('div');temp.style.cssText='position:fixed;left:-9999px;top:0;background:#fff;padding:8px';document.body.appendChild(temp);if(!window.QRCode){temp.remove();reject(new Error('二维码组件加载失败'));return}new QRCode(temp,{text:link,width:260,height:260,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});setTimeout(()=>{try{const source=temp.querySelector('canvas')||temp.querySelector('img');if(!source)throw new Error('二维码未生成');const c=document.createElement('canvas');c.width=600;c.height=760;const ctx=c.getContext('2d');ctx.fillStyle='#f4f5ef';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#111';ctx.fillRect(32,32,536,536);if(source.tagName==='CANVAS')ctx.drawImage(source,48,48,504,504);else{const im=new Image();im.onload=()=>{ctx.drawImage(im,48,48,504,504);finish()};im.onerror=()=>{temp.remove();reject(new Error('二维码图片无法读取'))};im.src=source.src;function finish(){drawBrand();temp.remove();resolve(c.toDataURL('image/png'))}return}function drawBrand(){ctx.fillStyle='#f4f5ef';ctx.fillRect(0,568,600,192);ctx.fillStyle='#111';ctx.font='bold 34px Arial,sans-serif';ctx.textAlign='center';ctx.fillText('SAME PLACE  同场',300,622);ctx.fillStyle='#52751c';ctx.font='bold 25px Arial,sans-serif';ctx.fillText(String(state.config.spaceName||state.space).slice(0,24),300,666);ctx.fillStyle='#333';ctx.font='bold 22px sans-serif';ctx.fillText('微信扫一扫，进入同场空间',300,710);ctx.fillStyle='#555';ctx.font='16px Arial,sans-serif';ctx.fillText('SCAN TO ENTER · SAME PLACE',300,740)}drawBrand();temp.remove();resolve(c.toDataURL('image/png'))}catch(e){temp.remove();reject(e)}},180)});}
+async function downloadQr(which='result'){
+  const link=which==='space'?buildSpaceLink():(document.getElementById('spaceUrlLink')?.href||buildSpaceLink());
+  if(!link||link==='#'){toast('请先保存空间配置。');return}
+  try{
+    if(!window.QRCode){toast('二维码组件正在加载，请稍等几秒再点保存。');return}
+    const data=await drawWatermarkedQr(which==='space'?'spaceQrCode':'resultQrCode',link);
+    const filename='same-place-'+slug(state.config.spaceName||state.space)+'-qr.png';
+    const res=await fetch(data);const blob=await res.blob();
+    const file=new File([blob],filename,{type:'image/png'});
+    // Only request the platform share/save UI after the user presses the save button.
+    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],title:'同场空间二维码',text:'微信扫一扫，进入同场空间'});toast('已打开系统分享菜单，请选择“存储图像”或“存储到文件”。');return}
+      catch(err){if(err&&err.name==='AbortError')return;}
+    }
+    const objectUrl=URL.createObjectURL(blob);const a=document.createElement('a');a.href=objectUrl;a.download=filename;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),60000);
+    toast(/iPhone|iPad|iPod/i.test(navigator.userAgent)?'二维码已生成；若未自动保存，请在打开的图片中点分享，再选“存储图像”。':'已开始下载带同场水印的二维码 PNG。');
+  }catch(e){console.error(e);toast('二维码生成失败。请确认网络正常后重试。')}
+}
+function copySpaceLink(){const link=buildSpaceLink();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(link).then(()=>toast('空间链接已复制。')).catch(()=>prompt('复制以下空间链接',link));else prompt('复制以下空间链接',link)}
+function slug(s){return String(s||'space').toLowerCase().trim().replace(/[^a-z0-9一-鿿]+/g,'-').replace(/^-|-$/g,'').slice(0,48)||'space'}
+
+function applyFeatureGates(){ensureConfig();const c=state.config;const enabled=id=>c.features.includes(id);document.querySelectorAll('[data-page="waves"]').forEach(el=>el.classList.toggle('feature-disabled',!enabled('wave')));document.querySelectorAll('[data-page="chat"],[data-page="messages"]').forEach(el=>el.classList.remove('feature-disabled'));const compose=document.querySelector('.compose');if(compose)compose.classList.toggle('feature-disabled',!enabled('feed'));const postRoot=document.getElementById('feedPosts');if(postRoot)postRoot.querySelectorAll('.post-actions .action').forEach((b,i)=>{if(/赞/.test(b.textContent))b.classList.toggle('feature-disabled',!enabled('likes'));if(/Wave/.test(b.textContent))b.classList.toggle('feature-disabled',!enabled('wave'));if(/私聊/.test(b.textContent))b.classList.toggle('feature-disabled',!enabled('dm')||c.privacy==='low-exposure')});document.querySelectorAll('[data-feature]').forEach(el=>el.classList.toggle('feature-disabled',!enabled(el.dataset.feature)));const h=document.querySelector('#page-feed .heading p');if(h)h.textContent=c.venue==='education'?'在校园空间里交流、组队与分享。':'在同一个地方，留下此刻的你。';const waveNav=document.querySelector('#page-waves .heading h1');if(waveNav)waveNav.textContent=c.venue==='education'?'校园互动':'Wave';}
+function load(){try{const s=JSON.parse(localStorage.getItem('tongchang_state'));if(s)state={...state,...s}}catch(e){};ensureConfig();const params=new URLSearchParams(location.search);try{const shared=params.get('config');if(shared){const incoming=JSON.parse(shared);if(incoming&&Array.isArray(incoming.features)){state.config={...state.config,...incoming};state.space=incoming.spaceName||state.space;state.desc=incoming.desc||state.desc;}}}catch(e){}if(params.get('venue')==='education')state.config.venue='education';if(params.get('space'))state.config.spaceName=state.space=params.get('space');loadConfigForm();renderAll();applyFeatureGates()};function save(){try{localStorage.setItem('tongchang_state',JSON.stringify(state));return true}catch(e){try{const backup={...state,posts:state.posts.map(p=>({...p,image:''}))};localStorage.setItem('tongchang_state',JSON.stringify(backup));toast('内容已保存，图片太大未能持久保存；请重新选小一点的照片。')}catch(e2){toast('浏览器存储不可用，请在 Safari 中打开此文件。')}return false}}function showPage(p){ensureConfig();if((p==='waves'&&!state.config.features.includes('wave'))||(p==='chat'&&(!state.config.features.includes('dm')||state.config.privacy==='low-exposure'))){toast('此空间未开放该功能。');return}document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(p==='chat')renderChat();if(p==='waves')renderWaves();if(p==='setup')loadConfigForm();window.scrollTo({top:0,behavior:'smooth'})}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2400)}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function initials(n){return (n||'?').trim().slice(0,1).toUpperCase()}
+function renderAll(){ensureConfig();document.getElementById('topSpace').textContent=state.space;document.getElementById('sideSpace').textContent=state.space;document.getElementById('spaceName').textContent=state.space;document.getElementById('spaceArtName').textContent=state.space;document.getElementById('rightSpaceName').textContent=state.space;document.getElementById('spaceDesc').textContent=state.desc;document.getElementById('spaceDescriptionInput').value=state.desc;document.getElementById('profileNameDisplay').textContent=state.nickname;document.getElementById('ownProfileBioPreview').textContent=state.bio||'还没有填写个人介绍。';document.getElementById('nicknameInput').value=state.nickname;document.getElementById('bioInput').value=state.bio;document.getElementById('composeAvatar').textContent=initials(state.nickname);document.getElementById('profileAvatar').textContent=initials(state.nickname);document.getElementById('postCount').textContent=state.posts.length;document.getElementById('likeCount').textContent=state.posts.reduce((a,p)=>a+p.likes,0);renderFeed();renderPeople();renderWaves();renderChat();makeQr();renderFeatureHub();applyFeatureGates()}
+function renderFeatureHub(){ensureConfig();const c=state.config;const labels={events:['活动与报名','查看近期活动，表达参与意向。'],announcements:['场所公告','查看空间管理者发布的重要信息。'],music:['歌单与点歌','推荐歌曲或为下一首歌投票。'],study:['学习搭子','发起自习、学习或运动组队。'],lost:['失物招领','发布寻找或拾获物品的信息。']};const ids=['events','announcements','music','study','lost'].filter(id=>c.features.includes(id));const root=document.getElementById('featureHub');if(!root)return;root.innerHTML=ids.map(id=>`<div class="feature-tile"><b>${labels[id][0]}</b><p>${labels[id][1]}</p><button class="button" onclick="openFeature('${id}')">打开功能 ↗</button></div>`).join('');}
+function openFeature(id){ensureConfig();if(!state.config.features.includes(id)){toast('此空间未启用该功能。');return}const messages={events:'活动模块已开启。正式版可接入活动列表、报名人数和提醒。',announcements:'公告模块已开启。正式版可由空间管理员发布公告。',music:'歌单与点歌已开启。正式版可接入歌曲推荐和投票。',study:'学习搭子已开启。正式版可发布自习、学习和运动组队需求。',lost:'失物招领已开启。正式版可发布拾获或寻找信息。'};toast(messages[id]||'功能已开启。');}
+function canDeletePost(p){return !!p&&p.owner===state.nickname&&!!p.createdAt&&(Date.now()-p.createdAt)<=120000}
+function deletePost(id){const p=state.posts.find(x=>x.id===id);if(!p||!canDeletePost(p)){toast('仅可在发布后两分钟内删除自己的动态。');renderAll();return}if(!confirm('确定删除这条动态？'))return;state.posts=state.posts.filter(x=>x.id!==id);save();renderAll();toast('动态已从本设备删除。正式版需由服务器同步删除。')}
+function renderFeed(){const root=document.getElementById('feedPosts');if(!state.posts.length){root.innerHTML='<div class="card empty">这里还没有动态。发出第一条吧。</div>';return}root.innerHTML=state.posts.map(p=>`<article class="card post"><div class="post-head"><div class="avatar">${esc(initials(p.name))}</div><div class="post-meta"><strong>${esc(p.name)}</strong><small>${esc(p.time)} · ${esc(state.space)}</small></div><span class="tag">空间内</span></div><div class="post-text">${esc(p.text)}</div>${p.image?`<img class="post-image" src="${p.image}" alt="动态图片">`:''}<div class="post-actions"><button class="action ${p.liked?'liked':''}" onclick="toggleLike(${p.id})">${p.liked?'♥':'♡'} 赞同 · ${p.likes}</button><button class="action" onclick="wavePost(${p.id})">↗ Wave${p.waves?' · '+p.waves:''}</button><button class="action" onclick="startChat('${p.name}')">◌ 私聊</button>${canDeletePost(p)?`<button class="action delete-post" onclick="deletePost(${p.id})">删除 · ${Math.max(0,Math.ceil((120000-(Date.now()-(p.createdAt||0)))/1000))}s</button>`:p.owner===state.nickname?`<span class="small muted" style="margin-left:auto">删除时限已过</span>`:''}</div></article>`).join('');applyFeatureGates()}
+function publishPost(){ensureConfig();if(!state.config.features.includes('feed')){toast('此空间未开放动态发布。');return}const input=document.getElementById('postText'),text=input.value.trim();if(!text&&!state.imageDraft){toast('先写点内容，或添加一张照片。');return}state.posts.unshift({id:Date.now(),name:state.nickname,time:'刚刚',createdAt:Date.now(),owner:state.nickname,text,likes:0,liked:false,waves:0,image:state.imageDraft});input.value='';state.imageDraft='';document.getElementById('imagePreview').innerHTML='';document.getElementById('postImage').value='';save();renderAll();toast('动态已发布到当前空间。')}
+async function previewImage(e){const input=e.target;const f=input.files&&input.files[0];if(!f)return;if(!f.type||!f.type.startsWith('image/')){toast('请选择图片文件。');input.value='';return}try{toast('正在处理照片…');const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('read'));reader.readAsDataURL(f)});const img=await new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error('decode'));image.src=data});const maxSide=1400,scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);let result=canvas.toDataURL('image/jpeg',0.78);if(result.length>1200000)result=canvas.toDataURL('image/jpeg',0.58);state.imageDraft=result;document.getElementById('imagePreview').innerHTML=`<img class="post-image" src="${result}" alt="待发布图片"><div class="small muted" style="margin:4px 0 8px">照片已添加，可以发布动态。</div><button type="button" class="action" id="removeDraftImage">移除照片 ×</button>`;document.getElementById('removeDraftImage').addEventListener('click',()=>{state.imageDraft='';document.getElementById('imagePreview').innerHTML='';input.value='';toast('已移除照片。')});toast('照片已添加。现在点击「发布动态」。')}catch(err){console.error(err);toast('照片读取失败，请重新选择或用 Safari 打开。');input.value=''}}function toggleLike(id){ensureConfig();if(!state.config.features.includes('likes')){toast('此空间未开放点赞功能。');return}const p=state.posts.find(x=>x.id===id);if(!p)return;p.liked=!p.liked;p.likes=Math.max(0,p.likes+(p.liked?1:-1));save();renderAll()}function wavePost(id){ensureConfig();if(!state.config.features.includes('wave')){toast('此空间未开放 Wave。');return}const p=state.posts.find(x=>x.id===id);if(!p)return;p.waves++;state.waves.unshift({name:p.name,initial:initials(p.name),time:'刚刚',note:'你向这条动态发送了 Wave'});save();renderAll();toast('Wave 已发送。')}
+function renderPeople(){const html=people.map(p=>`<div class="person"><div class="avatar">${p.initial}</div><div class="name">${p.name}<small>${p.desc}</small></div><button class="mini-wave" onclick="sendWave('${p.id}')">Wave ↗</button></div>`).join('');const peopleList=document.getElementById('peopleList');if(peopleList)peopleList.innerHTML=html;document.getElementById('rightPeople').innerHTML=people.slice(0,2).map(p=>`<div class="person"><div class="avatar">${p.initial}</div><div class="name">${p.name}<small>${p.desc}</small></div><button class="mini-wave" onclick="sendWave('${p.id}')">Wave</button></div>`).join('')}
+function sendWave(id){ensureConfig();if(!state.config.features.includes('wave')){toast('此空间未开放 Wave。');return}const p=people.find(x=>x.id===id);if(!p)return;state.waves.unshift({name:p.name,initial:p.initial,time:'刚刚',note:'你向对方发送了 Wave'});save();renderWaves();toast('已向 '+p.name+' 发送 Wave。')}function renderWaves(){const root=document.getElementById('waveList');root.innerHTML=state.waves.length?state.waves.map(w=>`<div class="person"><div class="avatar">${esc(w.initial||initials(w.name))}</div><div class="name">${esc(w.name)}<small>${esc(w.note||'向你发送了 Wave')} · ${esc(w.time)}</small></div><button class="mini-wave" onclick="startChat('${esc(w.name)}')">聊一聊</button></div>`).join(''):'<div class="empty">还没有 Wave。你可以先向空间里的人打个招呼。</div>'}
+function renderChat(){const list=document.getElementById('chatList');list.innerHTML=people.map(p=>`<div class="chat-person ${state.activeChat===p.id?'active':''}" onclick="selectChat('${p.id}')"><div class="avatar">${p.initial}</div><span>${p.name}</span></div>`).join('');const p=people.find(x=>x.id===state.activeChat)||people[0];document.getElementById('chatTitle').textContent=p.name+' · '+state.space;const msgs=state.chats[p.id]||[];const root=document.getElementById('messages');root.innerHTML=msgs.length?msgs.map(m=>`<div class="bubble ${m.mine?'mine':''}">${esc(m.text)}</div>`).join(''):'<div class="empty">这是一个本地私聊演示。发送一条消息试试看。</div>';root.scrollTop=root.scrollHeight}function selectChat(id){state.activeChat=id;renderChat()}function sendMessage(){ensureConfig();if(!state.config.features.includes('dm')||state.config.privacy==='low-exposure'){toast('此空间未开放私聊。');return}const input=document.getElementById('chatInput'),text=input.value.trim();if(!text)return;const id=state.activeChat;if(!state.chats[id])state.chats[id]=[];state.chats[id].push({text,mine:true});input.value='';save();renderChat()}function startChat(name){let p=people.find(x=>x.name===name);if(!p){p={id:'custom_'+name,name,initial:initials(name),desc:'空间成员'};people.push(p)}state.activeChat=p.id;save();showPage('chat');renderChat()}
+function saveProfile(){const n=document.getElementById('nicknameInput').value.trim();if(!n){toast('昵称不能为空。');return}state.nickname=n;state.bio=document.getElementById('bioInput').value.trim();save();renderAll();toast('匿名身份已保存。')}function saveSpaceDesc(){state.desc=document.getElementById('spaceDescriptionInput').value.trim()||'一个属于此地点的空间。';save();renderAll();toast('空间简介已更新。')}function editSpace(){const n=prompt('修改空间显示名称',state.space);if(n&&n.trim()){state.space=n.trim().slice(0,40);save();renderAll();toast('空间名称已更新。')}}function resetDemo(){if(!confirm('确定重置本地演示吗？动态、点赞、Wave 和聊天记录将恢复初始状态。'))return;localStorage.removeItem('tongchang_state');state={nickname:'Somewhere',bio:'',space:'倒倒满 DODMAN',desc:'民谣 · 鸡尾酒 · 在这里遇见同频的人。',posts:JSON.parse(JSON.stringify(seedPosts)),waves:[],chats:{},activeChat:'p1',imageDraft:''};renderAll();toast('演示数据已重置。')}
+function makeQr(){const n=document.getElementById('spaceQrName');if(n)n.textContent=state.config.spaceName||state.space;const link=buildSpaceLink();generateQr('spaceQrCode',link)}
+window.addEventListener('error',function(e){try{toast('页面脚本出错：'+(e.message||'未知错误'))}catch(_){}});
+window.addEventListener('DOMContentLoaded',function(){try{load()}catch(e){console.error(e);document.body.insertAdjacentHTML('afterbegin','<div style="position:sticky;top:0;z-index:99;background:#ff6b79;color:#111;padding:12px;font:14px sans-serif">页面初始化失败：'+String(e.message||e).replace(/[&<>]/g,'')+'</div>')}});
+</script>
+<script>
+/* ===== 同场 云端版：接管数据层。同名函数覆盖原本地演示，界面保持原样 ===== */
+const CFG={url:'https://hkekgujgciklwvvdzqxa.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZWtndWpnY2lrbHd2dmR6cXhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMjg2NDIsImV4cCI6MjEwNzgwNDY0Mn0.DrQzk5MOW1U4ChTVGSMLdCEBqGiZy8jEvazN7obqxbk'};
+const sb=supabase.createClient(CFG.url,CFG.key);
+const $=s=>document.querySelector(s);
+const ERR={'Invalid login credentials':'邮箱或密码错误','Email not confirmed':'邮箱尚未验证，请先点击验证邮件里的链接','User already registered':'该邮箱已注册',email_not_verified:'请先点击验证邮件里的链接，再重新登录',too_many_spaces:'每个账号最多创建 5 个空间',bad_name:'请填写空间名称',not_admin:'只有空间管理员可以这样做'};
+const msg=e=>/fetch|network/i.test(e?.message||'')?'网络异常，请检查网络后重试':(ERR[e?.message]||e?.message||'操作失败');
+const act=async(fn,btn)=>{if(btn){if(btn.disabled)return;btn.disabled=true}try{return await fn()}catch(e){toast(msg(e))}finally{if(btn)btn.disabled=false}};
+let me=null,prof=null,SP=null,role=null,creating=false,curSlug=sessionStorage.getItem('sp_slug'),chan=null,tmr=null,stream=null,deb=null,spaceEpoch=0;
+let members=[],blocked=new Set(),posts=[],wavesIn=[],chatMsgs=[],outbox=[],inboxMsgs=[];
+{const s=new URLSearchParams(location.search).get('s');if(s){curSlug=s;sessionStorage.setItem('sp_slug',s)}}
+const ago=t=>{const s=(Date.now()-new Date(t))/1000;return s<60?'刚刚':s<3600?Math.floor(s/60)+' 分钟前':s<86400?Math.floor(s/3600)+' 小时前':new Date(t).toLocaleDateString()};
+const setT=(i,t)=>{const e=document.getElementById(i);if(e)e.textContent=t};
+const setV=(i,v)=>{const e=document.getElementById(i);if(e&&document.activeElement!==e)e.value=v};
+const showGate=h=>{const g=$('#gate');g.innerHTML=`<div class="gwrap"><div style="display:flex;gap:11px;align-items:center;margin-bottom:18px"><div class="logo">同</div><strong>同场 SAME PLACE</strong></div>${h}</div>`;g.hidden=false};
+const hideGate=()=>{$('#gate').hidden=true};
+const isAdmin=()=>role==='admin';
+const has=id=>state.config.features.includes(id);
+const others=()=>members.filter(m=>!m.banned&&m.user_id!==me?.id&&!blocked.has(m.user_id));
+const nm=m=>m.profiles?.nickname||'?';
+
+// ---------- 账号 ----------
+function authView(mode='login',note=''){
+  const t={login:'登录',reg:'注册',forgot:'找回密码'}[mode];
+  showGate(`<h2>${t}</h2>${curSlug?'<p class="muted small">登录后会自动进入你扫码的空间。</p>':''}${note?`<div class="card">${esc(note)}</div>`:''}
+  <input id="em" type="email" placeholder="邮箱" autocomplete="email">${mode=='reg'?'<input id="nk" type="text" maxlength="20" placeholder="昵称（可匿名）">':''}${mode!='forgot'?'<input id="pw" type="password" placeholder="密码（至少 8 位）">':''}
+  <p><button class="button primary" id="go" style="width:100%;padding:13px">${t}</button></p>
+  <div class="row2" style="justify-content:space-between">${mode=='login'?'<a href="#" id="l1">注册新账号</a><a href="#" id="l2">忘记密码</a>':'<a href="#" id="l1">返回登录</a>'}</div>`);
+  $('#l1').onclick=e=>{e.preventDefault();authView(mode=='login'?'reg':'login')};
+  if($('#l2'))$('#l2').onclick=e=>{e.preventDefault();authView('forgot')};
+  const back=location.origin+location.pathname+(curSlug?'?s='+encodeURIComponent(curSlug):'');
+  $('#go').onclick=()=>act(async()=>{
+    const email=$('#em').value.trim(),password=$('#pw')?.value||'';if(!email)return toast('请输入邮箱');
+    if(mode=='forgot'){const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:back});if(error)throw error;return authView('login','如果该邮箱已注册，重置链接已发送，请查收邮件。')}
+    if(password.length<8)return toast('密码至少 8 位');
+    if(mode=='reg'){const{data,error}=await sb.auth.signUp({email,password,options:{data:{nickname:$('#nk').value.trim()},emailRedirectTo:back}});if(error)throw error;
+      if(data.user&&data.user.identities?.length===0)return toast('该邮箱已注册，请直接登录');
+      if(!data.session)return authView('login','验证邮件已发送，请点击邮件里的链接完成验证，然后登录。')}
+    else{const{error}=await sb.auth.signInWithPassword({email,password});if(error)throw error}
+  },$('#go'));
+}
+function resetView(){showGate(`<h2>设置新密码</h2><input id="np" type="password" placeholder="新密码（至少 8 位）"><p><button class="button primary" id="go" style="width:100%;padding:13px">保存新密码</button></p>`);
+  $('#go').onclick=()=>act(async()=>{const p=$('#np').value;if(p.length<8)return toast('密码至少 8 位');const{error}=await sb.auth.updateUser({password:p});if(error)throw error;toast('密码已更新');boot(me)},$('#go'))}
+function load(){sb.auth.onAuthStateChange((ev,s)=>{
+  if(ev==='PASSWORD_RECOVERY'){me=s.user;return resetView()}
+  if(!s){me=null;teardown();SP=null;return authView()}
+  if(me&&me.id===s.user.id)return;setTimeout(()=>boot(s.user),0)})}
+const logout=async()=>{if(window.spBeforeLogout)await window.spBeforeLogout();return sb.auth.signOut()};
+async function boot(user){me=user;const r=await sb.from('profiles').select('*').eq('id',me.id).single();if(r.error)return toast(msg(r.error));prof=r.data;syncDMPrivacy();state.nickname=prof.nickname;state.avatarEmoji=prof.avatar_emoji||'🌙';state.avatarUrl=prof.avatar_url||'';curSlug?enterSpace(curSlug):home()}
+
+// ---------- 首页：加入者 / 创建者 ----------
+async function home(){
+  teardown();SP=null;role=null;creating=false;curSlug=null;sessionStorage.removeItem('sp_slug');history.replaceState(null,'',location.pathname);clearSpaceData();
+  showGate(`<h2>你好，${esc(prof.nickname)}</h2>
+  <div class="card"><b>我是加入者</b><p class="small muted">扫描场所的二维码，进入这个地方的空间。</p><button class="button primary" onclick="scanView()">扫码加入</button></div>
+  <div class="card"><b>我是创建者</b><p class="small muted">为你的场所创建空间，选择开放哪些功能，并生成二维码。</p><button class="button primary" onclick="startCreate()">创建空间</button></div>
+  <h3>我的空间</h3><div id="mine" class="small muted">加载中…</div><p><button class="button" onclick="logout()">退出登录</button></p>`);
+  const{data,error}=await sb.from('space_members').select('role,status,spaces(id,slug,name,description)').eq('user_id',me.id);const el=$('#mine');if(!el)return;
+  if(error)return el.textContent='加载失败，请刷新重试';const rows=data.filter(x=>x.status!=='banned'&&x.spaces);
+  el.innerHTML=rows.length?rows.map(x=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>${esc(x.spaces.name)}</b><span class="row2"><button class="button primary" onclick="enterSpace('${esc(x.spaces.slug)}')">进入</button>${x.role==='admin'?`<button class="button" onclick="enterSpace('${esc(x.spaces.slug)}',true)">二维码</button>`:''}</span></div>`).join(''):'你还没有加入任何空间。';
+}
+function startCreate(){teardown();SP=null;role=null;clearSpaceData();creating=true;hideGate();resetSpaceConfigForm();state.space='';state.config.spaceName='';state.config.desc='';state.desc='';setT('topSpace','新空间');
+  document.querySelectorAll('[data-page=setup]').forEach(b=>b.style.display='');document.querySelectorAll('[data-page=admin]').forEach(b=>b.style.display='none');showPage('setup')}
+function stopCam(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}}
+async function scanView(){
+  showGate(`<button class="button" onclick="home()">‹ 返回</button><h2>扫码加入</h2><video id="cam" playsinline muted style="width:100%;border-radius:16px;background:#000"></video><p class="small muted" id="sc">正在请求后置相机权限…</p><p class="small muted">相机打不开时，也可以直接用微信或系统相机扫描二维码。</p>`);
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false})}catch(e){setT('sc','无法使用相机：请在浏览器设置里允许相机权限，或改用系统相机扫码。');return}
+  const v=$('#cam');if(!v){stopCam();return}v.srcObject=stream;await v.play();setT('sc','把二维码对准画面');
+  const c=document.createElement('canvas'),x=c.getContext('2d',{willReadFrequently:true});
+  const tick=()=>{if(!stream)return;if(v.readyState>=2&&v.videoWidth){c.width=v.videoWidth;c.height=v.videoHeight;x.drawImage(v,0,0);
+    const r=jsQR(x.getImageData(0,0,c.width,c.height).data,c.width,c.height);
+    if(r){let p=null;try{p=new URL(r.data).searchParams.get('s')}catch{}if(p&&/^[a-z0-9-]{3,40}$/.test(p)){stopCam();return enterSpace(p)}setT('sc','这不是同场的二维码')}}requestAnimationFrame(tick)};tick();
+}
+
+// ---------- 进入空间 ----------
+function teardown(){stopCam();if(chan)sb.removeChannel(chan);chan=null;clearInterval(tmr);clearTimeout(deb);spaceEpoch++}
+function clearSpaceData(){likeNotices=[];notifySeenReady.clear();updateMessageBadges();
+  // Space-scoped caches and drafts must never survive a switch, even if the next query fails.
+  members=[];blocked=new Set();posts=[];wavesIn=[];chatMsgs=[];outbox=[];inboxMsgs=[];state.activeChat=null;lastPeer=null;state.imageDraft='';
+  const postText=document.getElementById('postText'),preview=document.getElementById('imagePreview'),imageInput=document.getElementById('postImage'),chatInput=document.getElementById('chatInput');
+  if(postText)postText.value='';if(preview)preview.innerHTML='';if(imageInput)imageInput.value='';if(chatInput)chatInput.value='';
+}
+async function enterSpace(s,toQr){
+  teardown();SP=null;role=null;clearSpaceData();curSlug=s;sessionStorage.setItem('sp_slug',s);creating=false;
+  showGate(`<div style="text-align:center;padding:36px 0"><div class="logo" style="margin:0 auto 16px">同</div><h2>正在切换空间…</h2><p class="small muted">正在加载该空间的动态、成员和消息，请稍候。</p></div>`);
+  const r=await sb.rpc('join_space',{p_slug:s});
+  if(r.error){const m=r.error.message;curSlug=null;sessionStorage.removeItem('sp_slug');
+    showGate(`<h2>无法进入</h2><p class="muted">${m.includes('banned')?'你已被该空间封禁。':m.includes('space_not_found')?'这个空间不存在，请确认二维码。':m.includes('email_not_verified')?'邮箱还没有验证。请点击验证邮件里的链接后重新登录。':esc(msg(r.error))}</p><div class="row2"><button class="button primary" onclick="home()">返回首页</button><button class="button" onclick="logout()">退出登录</button></div>`);return}
+  SP=Array.isArray(r.data)?r.data[0]:r.data;
+  if(!SP){curSlug=null;sessionStorage.removeItem('sp_slug');return home()}
+  const m=await sb.from('space_members').select('role,status').match({space_id:SP.id,user_id:me.id}).single();
+  if(m.data?.status==='banned'){curSlug=null;sessionStorage.removeItem('sp_slug');SP=null;return home()}
+  role=m.data?.role||'member';state.activeChat=null;
+  applySpace();await loadAll();subscribe();hideGate();showPage(toQr?'space':'feed');
+}
+function applySpace(){
+  const c=SP.config&&SP.config.features?SP.config:null,f=SP.features||{};
+  const feats=c?c.features:['feed','likes','events','announcements'].concat(f.wave!==false?['wave']:[],f.chat!==false?['dm']:[]);
+  state.space=SP.name;state.desc=SP.description||'一个属于此地点的空间。';state.nickname=prof.nickname;state.bio=prof.bio||'';
+  state.config={venue:c?.venue||SP.venue_type||'education',spaceName:SP.name,desc:state.desc,features:feats,privacy:c?.privacy||'controlled',retention:c?.retention||'permanent',saved:true};
+  document.querySelectorAll('[data-page=setup],[data-page=admin]').forEach(b=>b.style.display=isAdmin()?'':'none');loadConfigForm();
+}
+const gatesOf=c=>{const h=id=>c.features.includes(id);return{posts:h('feed'),images:h('feed'),wave:h('wave'),chat:h('dm')&&c.privacy!=='low-exposure'}};
+const cfgOf=c=>({venue:c.venue,features:c.features,privacy:c.privacy,retention:c.retention});
+function buildSpaceLink(){return location.origin+location.pathname+(SP?'?s='+encodeURIComponent(SP.slug):'')}
+function save(){return true}
+async function pushSpace(over={}){const c=state.config,{data,error}=await sb.rpc('update_space',{p_space:SP.id,p_name:over.name??SP.name,p_desc:over.desc??(SP.description||''),p_features:gatesOf(c),p_config:cfgOf(c)});if(error)throw error;SP=Array.isArray(data)?data[0]:data;applySpace();await loadAll()}
+function saveSpaceConfig(){return act(async()=>{ensureConfig();const name=document.getElementById('configSpaceName').value.trim();if(!name)return toast('请先填写空间名称。');
+  const c=state.config;c.spaceName=name;c.desc=document.getElementById('configSpaceDesc').value.trim();c.privacy=document.getElementById('configPrivacy').value;c.retention=document.getElementById('configRetention').value;
+  if(creating){const{data,error}=await sb.rpc('create_space',{p_name:name,p_desc:c.desc,p_venue:c.venue,p_features:gatesOf(c),p_config:cfgOf(c)});if(error)throw error;
+    SP=Array.isArray(data)?data[0]:data;role='admin';creating=false;curSlug=SP.slug;sessionStorage.setItem('sp_slug',curSlug);applySpace();await loadAll();subscribe()}
+  else if(SP&&isAdmin())await pushSpace({name,desc:c.desc});else return toast('只有空间管理员可以修改配置。');
+  showConfigResult();toast('空间配置已保存，二维码入口已生成。')})}
+var saveSpaceDesc=()=>act(async()=>{if(!isAdmin())return toast('只有空间管理员可以修改。');await pushSpace({desc:document.getElementById('spaceDescriptionInput').value.trim()});toast('空间简介已更新。')});
+var editSpace=()=>act(async()=>{if(!isAdmin())return toast('只有空间管理员可以修改。');const n=prompt('修改空间显示名称',SP.name);if(n&&n.trim()){await pushSpace({name:n.trim().slice(0,40)});toast('空间名称已更新。')}});
+var saveProfile=()=>act(async()=>{const n=document.getElementById('nicknameInput').value.trim();if(!n)return toast('昵称不能为空。');
+  const{data,error}=await sb.from('profiles').update({nickname:n,bio:document.getElementById('bioInput').value.trim(),avatar_emoji:state.avatarEmoji||prof?.avatar_emoji||'🌙',avatar_url:state.avatarUrl||null}).eq('id',me.id).select().single();if(error)throw error;prof=data;syncDMPrivacy();state.nickname=n;state.bio=data.bio||'';await loadAll();toast('身份与头像已保存。')});
+var resetDemo=()=>logout();
+
+// ---------- 数据读取 ----------
+async function loadAll(){if(!SP)return;const sid=SP.id,epoch=spaceEpoch;await loadMembers();await Promise.all([loadFeed(),loadWaves(),loadInbox()]);if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;const peers=others();if(!peers.some(x=>x.user_id===state.activeChat))state.activeChat=inboxMsgs.find(x=>x.peer_id)?.peer_id||peers[0]?.user_id||null;await loadMsgs();if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;renderAll();await loadLikeNotifications();if($('#page-admin').classList.contains('active'))loadAdmin()}
+async function loadFeed(){
+  if(!SP)return;const sid=SP.id,epoch=spaceEpoch;
+  // Separate queries avoid PostgREST ambiguous embedded FK errors.
+  const {data,error}=await sb.from('posts').select('id,body,image_path,created_at,author_id').eq('space_id',sid).eq('removed',false).order('created_at',{ascending:false}).limit(50);
+  if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;
+  if(error){console.error('SAME PLACE feed:',error);toast('动态加载失败：'+msg(error));return}
+  const rows=data||[], ids=rows.map(x=>x.id), authors=[...new Set(rows.map(x=>x.author_id).filter(Boolean))];
+  let profileMap=new Map(), likesMap=new Map();
+  if(authors.length){const r=await sb.from('profiles').select('id,nickname,bio,avatar_emoji,avatar_url').in('id',authors);if(r.error)console.warn('profile load:',r.error);else profileMap=new Map((r.data||[]).map(x=>[x.id,x]));}
+  if(ids.length){const r=await sb.from('likes').select('post_id,user_id,is_private').in('post_id',ids);if(r.error)console.warn('likes load:',r.error);else for(const l of r.data||[]){if(!likesMap.has(l.post_id))likesMap.set(l.post_id,[]);likesMap.get(l.post_id).push(l)}}
+  const paths=rows.filter(x=>x.image_path).map(x=>x.image_path),u={};
+  if(paths.length){const r=await sb.storage.from('post-images').createSignedUrls(paths,3600);if(r.error)console.warn('image URLs:',r.error);(r.data||[]).forEach(x=>u[x.path]=x.signedUrl)}
+  if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;
+  posts=rows.filter(x=>!blocked.has(x.author_id)).map(x=>({...x,profiles:profileMap.get(x.author_id)||null,likes:(likesMap.get(x.id)||[]).filter(l=>!blocked.has(l.user_id)),img:u[x.image_path]||''}));
+}
+async function loadMembers(){if(!SP||!me)return;const sid=SP.id,epoch=spaceEpoch;const[m,b]=await Promise.all([sb.from('space_members').select('user_id,role,status,banned,profiles(nickname,bio,avatar_emoji,avatar_url)').eq('space_id',sid),sb.from('blocks').select('blocked_id').eq('blocker_id',me.id)]);
+  if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;if(!m.error)members=(m.data||[]).map(x=>({...x,banned:!!x.banned}));if(!b.error){blocked=new Set((b.data||[]).map(x=>x.blocked_id));members=members.filter(x=>!blocked.has(x.user_id));}}
+async function loadWaves(){if(!SP||!me)return;const sid=SP.id,epoch=spaceEpoch;const{data,error}=await sb.from('waves').select('from_id,created_at,profiles!waves_from_id_fkey(nickname,avatar_emoji,avatar_url)').eq('space_id',sid).eq('to_id',me.id).order('created_at',{ascending:false}).limit(30);if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;if(error){console.warn('loadWaves',error.message);wavesIn=[];return}wavesIn=(data||[]).filter(w=>!blocked.has(w.from_id))}
+async function loadInbox(){if(!SP||!me)return;const sid=SP.id,epoch=spaceEpoch;const{data,error}=await sb.from('messages').select('id,space_id,sender_id,receiver_id,body,read_at,created_at,client_id').eq('space_id',sid).or(`sender_id.eq.${me.id},receiver_id.eq.${me.id}`).order('created_at',{ascending:false}).limit(300);if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;if(error){console.warn('loadInbox',error.message);inboxMsgs=[];return}const map=new Map();for(const m of(data||[])){const peer=m.sender_id===me.id?m.receiver_id:m.sender_id;if(!peer||peer===me.id||blocked.has(peer))continue;let c=map.get(peer);if(!c){c={peer_id:peer,last:m,unread:0};map.set(peer,c)}if(m.receiver_id===me.id&&!m.read_at)c.unread++}inboxMsgs=[...map.values()].sort((a,b)=>new Date(b.last.created_at)-new Date(a.last.created_at))}
+async function loadMsgs(){const p=state.activeChat;if(!SP||!me||!p)return;const sid=SP.id,epoch=spaceEpoch,a=me.id;
+  const{data,error}=await sb.from('messages').select('*').eq('space_id',sid).or(`and(sender_id.eq.${a},receiver_id.eq.${p}),and(sender_id.eq.${p},receiver_id.eq.${a})`).order('created_at').limit(300);
+  if(!SP||SP.id!==sid||spaceEpoch!==epoch||state.activeChat!==p)return;if(error)return toast(msg(error));chatMsgs=blocked.has(p)?[]:(data||[]);await dmSignedUrls(chatMsgs);if(!SP||SP.id!==sid||spaceEpoch!==epoch||state.activeChat!==p)return;
+  if((data||[]).some(m=>m.receiver_id===a&&!m.read_at))sb.from('messages').update({read_at:new Date().toISOString()}).eq('space_id',sid).eq('sender_id',p).eq('receiver_id',a).is('read_at',null).then(()=>{})}
+function subscribe(){if(chan)sb.removeChannel(chan);const f=`space_id=eq.${SP.id}`,ch=sb.channel('sp-'+SP.id),go=()=>{clearTimeout(deb);deb=setTimeout(loadAll,300)};
+  for(const[t,fl]of[['posts',f],['likes',null],['waves',f],['messages',f],['like_notifications',null]])ch.on('postgres_changes',{event:'*',schema:'public',table:t,...(fl?{filter:fl}:{})},()=>{if(t==='like_notifications')loadLikeNotifications();else go()});
+  ch.subscribe(s=>{if(s==='SUBSCRIBED')go()});chan=ch;clearInterval(tmr);tmr=setInterval(loadAll,20000)}
+
+// ---------- 渲染（沿用原界面的 class） ----------
+function showPage(p){if(!SP&&!(creating&&p==='setup'))return toast('请先进入或创建一个空间。');ensureConfig();
+  if((p==='waves'&&!has('wave'))||(p==='chat'&&(!has('dm')||state.config.privacy==='low-exposure'))){toast('此空间未开放该功能。');return}
+  if((p==='admin'||p==='setup')&&!isAdmin()&&!creating){toast('只有空间管理员可以进入。');return}
+  document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));
+  if(p==='messages'){Promise.all([loadInbox(),loadLikeNotifications()]).then(()=>{renderInbox();updateMessageBadges();switchMessageTab(likeTab)})}if(p==='chat')loadMsgs().then(renderChat);if(p==='waves')renderWaves();if(p==='setup')loadConfigForm();if(p==='admin')loadAdmin();window.scrollTo({top:0,behavior:'smooth'})}
+const AVATARS=['🌙','🌿','☁️','⭐','🪐','🌊','🦋','🐈','🐼','🍀','🎧','🖤'];
+function avatarMark(profile,name){return profile?.avatar_emoji||initials(name||profile?.nickname||'?')}
+function avatarMarkup(profile,name){const url=profile?.avatar_url;if(url)return `<img src="${esc(url)}" alt="头像" loading="lazy">`;return esc(avatarMark(profile,name))}
+function setAvatarContent(id,profile,name){const el=document.getElementById(id);if(el)el.innerHTML=avatarMarkup(profile,name)}
+function chooseAvatar(emoji){if(!AVATARS.includes(emoji))return;state.avatarEmoji=emoji;state.avatarUrl='';const av=document.getElementById('profileAvatar');if(av)av.textContent=emoji;document.querySelectorAll('.avatar-option').forEach(b=>b.classList.toggle('active',b.dataset.avatar===emoji))}
+function syncAvatarPicker(){const emoji=prof?.avatar_emoji||state.avatarEmoji||'🌙';state.avatarEmoji=emoji;state.avatarUrl=state.avatarUrl??prof?.avatar_url??'';const av=document.getElementById('profileAvatar');if(av){if(state.avatarUrl)av.innerHTML=`<img src="${esc(state.avatarUrl)}" alt="头像">`;else av.textContent=emoji}document.querySelectorAll('.avatar-option').forEach(b=>b.classList.toggle('active',!state.avatarUrl&&b.dataset.avatar===emoji))}
+async function chooseAvatarPhoto(input){const file=input.files&&input.files[0];if(!file)return;if(!file.type.startsWith('image/')){toast('请选择图片文件。');input.value='';return}if(file.size>12*1024*1024){toast('图片请控制在 12MB 以内。');input.value='';return}try{if(!me)throw new Error('请先登录。');toast('正在处理头像…');const dataUrl=await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=()=>reject(new Error('无法读取图片'));fr.readAsDataURL(file)});const img=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(new Error('无法打开图片'));im.src=dataUrl});const canvas=document.createElement('canvas'),max=320,scale=Math.min(1,max/Math.max(img.width,img.height));canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.82));if(!blob)throw new Error('图片处理失败');const path=`${me.id}/avatar-${Date.now()}.jpg`;const{error}=await sb.storage.from('avatars').upload(path,blob,{contentType:'image/jpeg',upsert:true});if(error)throw error;const{data}=sb.storage.from('avatars').getPublicUrl(path);state.avatarUrl=data.publicUrl;state.avatarEmoji=prof?.avatar_emoji||'🌙';const av=document.getElementById('profileAvatar');if(av)av.innerHTML=`<img src="${esc(state.avatarUrl)}" alt="头像预览">`;document.querySelectorAll('.avatar-option').forEach(b=>b.classList.remove('active'));toast('照片已选好，点击「保存身份」即可生效。')}catch(e){toast(e.message||'头像上传失败，请检查网络或存储设置。')}finally{input.value=''}}
+function removeAvatarPhoto(){state.avatarUrl='';const emoji=prof?.avatar_emoji||state.avatarEmoji||'🌙';state.avatarEmoji=emoji;const av=document.getElementById('profileAvatar');if(av)av.textContent=emoji;document.querySelectorAll('.avatar-option').forEach(b=>b.classList.toggle('active',b.dataset.avatar===emoji));toast('已切换回符号头像，点击「保存身份」生效。')}
+function renderAll(){if(!SP)return;ensureConfig();['topSpace','sideSpace','spaceName','spaceArtName','rightSpaceName'].forEach(i=>setT(i,state.space));setT('spaceDesc',state.desc);
+  setV('spaceDescriptionInput',state.desc);setT('profileNameDisplay',state.nickname);setT('ownProfileBioPreview',state.bio||'还没有填写个人介绍。');setV('nicknameInput',state.nickname);setV('bioInput',state.bio);
+  setAvatarContent('composeAvatar',prof,state.nickname);setAvatarContent('profileAvatar',prof,state.nickname);syncAvatarPicker();setT('postCount',posts.length);setT('likeCount',posts.reduce((a,p)=>a+p.likes.filter(l=>!l.is_private).length,0));setT('memberCount',members.filter(m=>!m.banned).length);
+  renderFeed();renderPeople();renderWaves();renderInbox();renderChat();makeQr();renderFeatureHub();applyFeatureGates()}
+function renderFeed(){const el=document.getElementById('feedPosts');if(!posts.length){el.innerHTML='<div class="card empty">这里还没有动态。发出第一条吧。</div>';return}
+  el.innerHTML=posts.map(p=>{const ownLike=p.likes.find(l=>l.user_id===me.id),liked=!!ownLike,mine=p.author_id===me.id,n=p.profiles?.nickname||'?',fresh=Date.now()-new Date(p.created_at)<120000,publicCount=p.likes.filter(l=>!l.is_private).length,privateCount=p.likes.filter(l=>l.is_private).length;
+  const privateButton=mine?`<button class="action private-like" onclick="openPrivateLikes('${p.id}')">私密赞 · ${privateCount} 人</button>`:`<button class="action private-like ${ownLike?.is_private?'liked':''}" onclick="toggleLike('${p.id}',true)">${ownLike?.is_private?'♥ 已私密赞':'♡ 私密赞'}</button>`;
+  return `<article class="card post"><div class="post-head"><button type="button" class="avatar avatar-click" aria-label="查看 ${esc(n)} 的资料" title="查看成员资料" onclick="openMemberProfile('${p.author_id}')">${avatarMarkup(p.profiles,n)}</button><div class="post-meta"><strong class="profile-name-click" onclick="openMemberProfile('${p.author_id}')">${esc(n)}</strong><small>${ago(p.created_at)} · ${esc(state.space)}</small></div><span class="tag">空间内</span></div><div class="post-text">${esc(p.body)}</div>${p.img?`<img class="post-image" src="${esc(p.img)}" alt="动态图片">`:''}<div class="post-actions"><div class="like-pair"><button class="action ${liked&&!ownLike?.is_private?'liked':''}" onclick="toggleLike('${p.id}',false)">${liked&&!ownLike?.is_private?'♥':'♡'} 公开赞 · ${publicCount}</button>${privateButton}</div><button class="action" onclick="openPublicLikes('${p.id}')">查看公开赞用户 ↗</button><button class="action" onclick="wavePost('${p.id}')">↗ Wave</button><button class="action" onclick="startChat('${p.author_id}')">◌ 私聊</button>${mine?(fresh?`<button class="action delete-post" onclick="deletePost('${p.id}')">删除（2 分钟内）</button>`:'<span class="small muted" style="margin-left:auto">删除时限已过</span>'):`<button class="action" onclick="reportPost('${p.id}')">举报</button>`}</div></article>`}).join('');applyFeatureGates()}
+function renderPeople(){const row=(m,x)=>`<div class="person"><button type="button" class="avatar avatar-click" aria-label="查看 ${esc(nm(m))} 的资料" title="查看成员资料" onclick="openMemberProfile('${m.user_id}')">${avatarMarkup(m.profiles,nm(m))}</button><div class="name profile-name-click" onclick="openMemberProfile('${m.user_id}')">${esc(nm(m))}<small>${esc(m.profiles?.bio||'空间成员')}</small></div><button class="mini-wave" onclick="sendWave('${m.user_id}')">Wave${x?' ↗':''}</button>${x?`<button class="mini-wave" onclick="blockUser('${m.user_id}')">屏蔽</button>`:''}</div>`;
+  const o=others();document.getElementById('peopleList').innerHTML=o.map(m=>row(m,1)).join('')||'<div class="empty">空间里还没有其他人。</div>';document.getElementById('rightPeople').innerHTML=o.slice(0,2).map(m=>row(m,0)).join('')}
+function renderWaves(){document.getElementById('waveList').innerHTML=wavesIn.length?wavesIn.map(w=>`<div class="person"><button type="button" class="avatar avatar-click" aria-label="查看 ${esc(w.profiles?.nickname||'成员')} 的资料" title="查看成员资料" onclick="openMemberProfile('${w.from_id}')">${avatarMarkup(w.profiles,w.profiles?.nickname)}</button><div class="name profile-name-click" onclick="openMemberProfile('${w.from_id}')">${esc(w.profiles?.nickname||'?')}<small>向你发送了 Wave · ${ago(w.created_at)}</small></div><button class="mini-wave" onclick="startChat('${w.from_id}')">聊一聊</button></div>`).join(''):'<div class="empty">还没有 Wave。你可以先向空间里的人打个招呼。</div>'}
+let likeNotices=[], likeTab='likes',notifySeenReady=new Set();
+function updateMessageBadges(){
+  if(!me)return;
+  const likesUnread=likeNotices.filter(n=>!n.read_at).length;
+  const chatUnread=inboxMsgs.reduce((a,c)=>a+c.unread,0);
+  const total=likesUnread+chatUnread;
+  for(const [id,num] of [['likeBadge',likesUnread],['chatBadge',chatUnread],['messageHeadingBadge',total]]){
+    const el=document.getElementById(id);if(!el)continue;el.hidden=!num;el.textContent=num>99?'99+':String(num);
+  }
+  document.querySelectorAll('.nav-unread').forEach(el=>{el.hidden=!total;el.textContent=total>99?'99+':String(total)});
+}
+function switchMessageTab(which){
+  likeTab=which==='chat'?'chat':'likes';
+  document.getElementById('messageLikePanel').hidden=likeTab!=='likes';
+  document.getElementById('messageChatPanel').hidden=likeTab!=='chat';
+  document.getElementById('tabLike').classList.toggle('primary',likeTab==='likes');
+  document.getElementById('tabChat').classList.toggle('primary',likeTab==='chat');
+  if(likeTab==='likes')renderLikeNotifications();
+}
+async function loadLikeNotifications(){
+  if(!SP||!me)return;
+  const sid=SP.id,epoch=spaceEpoch;
+  const {data,error}=await sb.from('like_notifications')
+    .select('id,actor_id,post_id,post_excerpt,is_private,created_at,read_at')
+    .eq('space_id',sid).eq('recipient_id',me.id)
+    .order('created_at',{ascending:false}).limit(100);
+  if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;
+  if(error){console.warn('like notification load:',error);const root=document.getElementById('likeNotifications');if(root)root.textContent='点赞通知暂时无法读取：'+msg(error);return}
+  const ids=[...new Set((data||[]).map(n=>n.actor_id).filter(Boolean))];
+  let profiles=new Map();
+  if(ids.length){const r=await sb.from('profiles').select('id,nickname,avatar_emoji,avatar_url').in('id',ids);if(!r.error)profiles=new Map((r.data||[]).map(x=>[x.id,x]))}
+  if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;
+  const before=new Set(likeNotices.filter(n=>!n.read_at).map(n=>n.id));
+  likeNotices=(data||[]).filter(n=>!blocked.has(n.actor_id)).map(n=>({...n,actor:profiles.get(n.actor_id)||null}));
+  const unread=likeNotices.filter(n=>!n.read_at).length;
+  if(!notifySeenReady.has(sid)){
+    notifySeenReady.add(sid);
+    if(unread)toast(`你有 ${unread} 条未读点赞通知，请到消息中心查看`);
+  }else if(likeNotices.some(n=>!n.read_at&&!before.has(n.id))){
+    toast('你收到一条新的点赞通知');
+  }
+  renderLikeNotifications();updateMessageBadges();
+}
+function renderLikeNotifications(){
+  likeNotices=likeNotices.filter(n=>!blocked.has(n.actor_id));
+  const root=document.getElementById('likeNotifications');if(!root)return;
+  if(!likeNotices.length){root.innerHTML='<div class="empty">目前没有点赞通知。收到公开赞或私密赞后，会显示在这里。</div>';return}
+  root.innerHTML=likeNotices.map(n=>{
+    const name=n.actor?.nickname||'空间成员',canChat=!!members.find(m=>m.user_id===n.actor_id&&!m.banned);
+    const preview=String(n.post_excerpt||'（图片动态）').slice(0,100);
+    return `<div class="like-notice ${n.read_at?'':'unseen'}">
+      <button type="button" class="avatar avatar-click" title="查看用户资料" onclick="openNoticePerson('${n.id}','${n.actor_id||''}')">${avatarMarkup(n.actor,name)}</button>
+      <div class="like-notice-body"><div class="like-notice-top"><strong>${esc(name)} ${n.is_private?'给你点了私密赞':'赞了你的动态'}</strong><span class="inbox-row-time">${ago(n.created_at)}</span></div>
+      <div class="notice-kind">${n.is_private?'♥ 私密赞 · 只有你能看到这条通知':'♡ 公开赞'} ${n.read_at?'':'<i class="notice-dot" aria-label="未读"></i>'}</div>
+      <div class="notification-post">${esc(preview)}</div><div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="button" onclick="readLikeNotice('${n.id}')">${n.read_at?'已读':'标记已读'}</button>
+      ${canChat?`<button class="button" onclick="openNoticePerson('${n.id}','${n.actor_id}')">查看资料 / 发起私聊</button>`:''}
+      </div></div></div>`;
+  }).join('');
+}
+async function readLikeNotice(id){
+  const n=likeNotices.find(x=>x.id===id);if(!n||n.read_at)return;
+  const {error}=await sb.rpc('mark_like_notification_read',{p_notification_id:id});
+  if(error){toast('标记失败：'+msg(error));return}
+  n.read_at=new Date().toISOString();renderLikeNotifications();updateMessageBadges();
+}
+function openNoticePerson(id,actorId){
+  readLikeNotice(id);
+  if(members.some(m=>m.user_id===actorId&&!m.banned))openMemberProfile(actorId);
+  else toast('对方目前不是这个空间的可联系成员。');
+}
+function refreshInbox(){return act(async()=>{await Promise.all([loadInbox(),loadLikeNotifications()]);renderInbox();toast('消息中心已刷新。')})}
+function openInboxChat(id){if(!id||id===me.id)return;state.activeChat=id;showPage('chat')}
+function renderInbox(){
+  const root=document.getElementById('inboxList'),fresh=document.getElementById('newConversationList');
+  if(!root||!fresh)return;
+  if(!me||!SP){root.innerHTML='<div class="empty">请先登录并进入一个空间。</div>';fresh.innerHTML='';return}
+  const peerMap=new Map(members.map(m=>[m.user_id,m]));
+  const getName=id=>nm(peerMap.get(id)||{profiles:{nickname:'空间成员'}});
+  const row=(id,last,unread=0)=>{const n=getName(id),body=last?(last.sender_id===me.id?'我：':'')+(last.body||'（图片或空消息）'):'还没有消息，打个招呼吧';return `<div class="inbox-row" role="button" tabindex="0" onclick="openInboxChat('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openInboxChat('${id}')}"><button type="button" class="avatar avatar-click inbox-row-avatar" aria-label="查看 ${esc(n)} 的资料" title="查看成员资料" onclick="event.stopPropagation();openMemberProfile('${id}')" onkeydown="event.stopPropagation()">${avatarMarkup(peerMap.get(id)?.profiles,n)}</button><div class="inbox-row-main"><div class="inbox-row-title"><strong>${esc(n)}</strong><span class="inbox-row-time">${last?ago(last.created_at):'新对话'}</span></div><div class="inbox-row-preview">${esc(body)}</div></div>${unread?`<b class="unread-count">${unread>99?'99+':unread}</b>`:''}</div>`};
+  updateMessageBadges();
+  root.innerHTML=inboxMsgs.length?inboxMsgs.map(c=>row(c.peer_id,c.last,c.unread)).join(''):'<div class="empty" style="padding:24px 12px">暂时没有私信记录。<br>你可以从下面选择一位空间成员开始聊天。</div>';
+  const used=new Set(inboxMsgs.map(c=>c.peer_id));const available=others().filter(m=>!used.has(m.user_id));
+  fresh.innerHTML=available.length?available.map(m=>row(m.user_id,null,0)).join(''):'<div class="empty" style="padding:22px 12px">没有其他可聊天的空间成员。</div>';
+}
+let dmSelectedFile=null,dmUploading=false;
+const dmUrlCache=new Map();
+function dmType(file){if(!file)return null;return /^image\/(jpeg|png|webp|gif)$/.test(file.type)?'image':/^video\/(mp4|quicktime|webm)$/.test(file.type)?'video':null}
+function chooseDMMedia(input){const f=input.files?.[0];if(!f)return;const type=dmType(f);if(!type){toast('仅支持 JPG/PNG/WebP/GIF 图片和 MP4/MOV/WebM 视频');input.value='';return}if(f.size>50*1024*1024){toast('单个图片或视频不得超过 50MB');input.value='';return}dmSelectedFile=f;const pre=document.getElementById('dmMediaPreview');pre.hidden=false;pre.innerHTML=`<span>${type==='image'?'🖼️ 图片':'🎬 视频'}：${esc(f.name)} · ${(f.size/1024/1024).toFixed(1)} MB</span><button type="button" onclick="clearDMMedia()">移除 ×</button>`}
+function clearDMMedia(){if(dmUploading)return;dmSelectedFile=null;document.getElementById('dmMediaInput').value='';const pre=document.getElementById('dmMediaPreview');pre.hidden=true;pre.innerHTML=''}
+async function dmSignedUrls(messages){const paths=[...new Set(messages.filter(m=>m.media_path&&!m.retracted_at).map(m=>m.media_path))].filter(x=>!dmUrlCache.has(x));if(!paths.length)return;for(let i=0;i<paths.length;i+=20){const batch=paths.slice(i,i+20),r=await sb.storage.from('dm-media').createSignedUrls(batch,3600);if(r.error){console.warn('DM media URL:',r.error.message);continue}for(const item of r.data||[])if(item.signedUrl)dmUrlCache.set(item.path,{url:item.signedUrl,expiry:Date.now()+3500*1000})}}
+function dmMediaHtml(m){if(!m.media_path||m.retracted_at)return '';const c=dmUrlCache.get(m.media_path);if(!c||c.expiry<Date.now()){dmUrlCache.delete(m.media_path);return '<div class="small">媒体链接加载中，请刷新对话</div>'}const url=esc(c.url);return m.media_type==='image'?`<a href="${url}" target="_blank" rel="noopener"><img class="dm-img" src="${url}" loading="lazy" alt="聊天图片"></a>`:m.media_type==='video'?`<video class="dm-video" src="${url}" controls playsinline preload="metadata"></video>`:''}
+let lastPeer=null;
+function renderChat(){const ps=others();if(!state.activeChat)state.activeChat=inboxMsgs[0]?.peer_id||ps[0]?.user_id||null;const a=state.activeChat,cur=ps.find(m=>m.user_id===a);const peerName=id=>nm(ps.find(m=>m.user_id===id)||{profiles:{nickname:'空间成员'}});const ordered=[...inboxMsgs.map(c=>({user_id:c.peer_id,conversation:c})),...ps.filter(m=>!inboxMsgs.some(c=>c.peer_id===m.user_id)).map(m=>({user_id:m.user_id,conversation:null}))];
+  document.getElementById('chatList').innerHTML='<div class="inbox-label">最近消息</div>'+ordered.map(x=>{const c=x.conversation,prev=c?.last,unread=c?.unread||0;return `<div class="chat-person ${a===x.user_id?'active':''}" onclick="selectChat('${x.user_id}')"><div class="avatar" onclick="event.stopPropagation();openMemberProfile('${x.user_id}')">${avatarMarkup(ps.find(m=>m.user_id===x.user_id)?.profiles,peerName(x.user_id))}</div><div class="inbox-copy"><div class="inbox-name">${esc(peerName(x.user_id))}${unread?`<b class="unread-count">${unread>99?'99+':unread}</b>`:''}</div><div class="inbox-preview">${prev?`${prev.sender_id===me.id?'我：':''}${esc(prev.body||'')}`:'开始聊天'}</div><div class="inbox-time">${prev?ago(prev.created_at):'新对话'}</div></div></div>`}).join('')||'<div class="empty">还没有消息。可以从空间动态或成员列表发起私聊。</div>';
+  setT('chatTitle',cur?nm(cur)+' · '+state.space:(a?'空间成员 · '+state.space:'选择一个对话'));const root=document.getElementById('messages'),end=root.scrollHeight-root.scrollTop-root.clientHeight<60||lastPeer!==a;lastPeer=a;
+  const ids=new Set(chatMsgs.map(x=>x.client_id).filter(Boolean)),st=t=>`<div style="font-size:11px;opacity:.6">${t}</div>`;
+  root.innerHTML=(chatMsgs.map(x=>{const retracted=!!x.retracted_at,age=Date.now()-new Date(x.created_at).getTime(),canRetract=x.sender_id===me.id&&!retracted&&age>=0&&age<=10*60*1000;const body=retracted?'这条消息已撤回':(x.body||'');return `<div class="bubble ${x.sender_id===me.id?'mine':''} ${retracted?'message-retracted':''}">${esc(body)}${dmMediaHtml(x)}${x.sender_id===me.id?st(retracted?'已撤回':(x.read_at?'已读':'已送达')):''}${canRetract?`<div class="message-actions"><button type="button" class="message-retract" onclick="retractMessage('${x.id}')">撤回</button></div>`:''}</div>`}).join('')+outbox.filter(o=>o.to===a&&!ids.has(o.cid)).map(o=>`<div class="bubble mine">${esc(o.body)}${st(o.failed?`发送失败 <a href="#" onclick="resend('${o.cid}');return false">重试</a>`:'发送中…')}</div>`).join(''))||'<div class="empty">还没有消息，打个招呼吧。</div>';
+  if(end)root.scrollTop=root.scrollHeight}
+
+// ---------- 互动 ----------
+async function publishPost(){if(!has('feed'))return toast('此空间未开放动态发布。');if(window._pub)return;const el=document.getElementById('postText'),text=el.value.trim();
+  if(!text&&!state.imageDraft)return toast('先写点内容，或添加一张照片。');window._pub=1;
+  try{let path=null;if(state.imageDraft){const blob=await(await fetch(state.imageDraft)).blob();path=`${SP.id}/${me.id}/${crypto.randomUUID()}.jpg`;const u=await sb.storage.from('post-images').upload(path,blob,{contentType:'image/jpeg'});if(u.error)throw u.error}
+    const{error}=await sb.from('posts').insert({space_id:SP.id,body:text||'📷',image_path:path});if(error)throw error;
+    el.value='';state.imageDraft='';document.getElementById('imagePreview').innerHTML='';document.getElementById('postImage').value='';toast('动态已发布到当前空间。');await loadFeed();renderAll()}
+  catch(e){toast(msg(e))}finally{window._pub=0}}
+var toggleLike=(id,makePrivate=false)=>act(async()=>{if(!has('likes'))return toast('此空间未开放点赞功能。');const p=posts.find(x=>x.id===id);if(!p)return;if(blocked.has(p.author_id))return toast('已屏蔽该成员，无法点赞。');if(p.author_id===me.id)return toast('不能给自己的动态点赞。');const mine=p.likes.find(l=>l.user_id===me.id);let r;if(mine&&!!mine.is_private===!!makePrivate){r=await sb.from('likes').delete().match({post_id:id,user_id:me.id})}else if(mine){r=await sb.from('likes').update({is_private:!!makePrivate}).match({post_id:id,user_id:me.id})}else{r=await sb.from('likes').insert({post_id:id,user_id:me.id,is_private:!!makePrivate})}if(r.error)throw r.error;await loadFeed();renderAll()});
+var sendWave=to=>act(async()=>{if(!has('wave'))return toast('此空间未开放 Wave。');if(to===me.id)return toast('这是你自己。');if(blocked.has(to))return toast('你已屏蔽该成员。');const{error}=await sb.from('waves').insert({space_id:SP.id,from_id:me.id,to_id:to});
+  if(error)throw error.code==='23505'?{message:'你已经向 TA 打过招呼了'}:error;toast('Wave 已发送。')});
+var wavePost=id=>sendWave(posts.find(x=>x.id===id).author_id);
+var deletePost=id=>act(async()=>{if(!confirm('确定删除这条动态？'))return;const{error}=await sb.rpc('delete_own_post',{p_post_id:id});if(error)throw error;toast('动态已删除。');await loadFeed();renderAll()});
+const reportPost=id=>act(async()=>{const r=prompt('举报原因');if(!r?.trim())return;const{error}=await sb.from('reports').insert({space_id:SP.id,post_id:id,reason:r.trim().slice(0,300)});if(error&&error.code!=='23505')throw error;toast('已提交举报，管理员会处理。')});
+const blockUser=id=>act(async()=>{if(id===me.id)return toast('不能屏蔽自己。');if(!confirm('屏蔽后，你们都无法再互相发私信或 Wave。确定？'))return;const{error}=await sb.from('blocks').insert({blocker_id:me.id,blocked_id:id});if(error&&error.code!=='23505')throw error;blocked.add(id);await loadAll();renderAll();toast('已屏蔽。已隐藏对方动态与点赞。')});
+let profileTargetId=null;
+function openMemberProfile(id){const m=members.find(x=>x.user_id===id);if(!m)return toast('暂时无法加载该成员资料。');closePrivateLikes();profileTargetId=id;const av=document.getElementById('memberModalAvatar');av.innerHTML=avatarMarkup(m.profiles,nm(m));av.dataset.nickname=nm(m);av.style.width='88px';av.style.height='88px';av.style.fontSize='30px';av.style.borderRadius='28px';av.onclick=zoomMemberAvatar;document.getElementById('memberModalName').textContent=nm(m);document.getElementById('memberModalBio').textContent=m.profiles?.bio||'这个人还没有填写自我介绍。';document.getElementById('memberModalHint').textContent=m.role==='admin'?'空间管理员 · 同场成员':'同场空间成员';document.getElementById('memberModalChat').textContent='进入私聊';document.getElementById('memberModalChat').disabled=blocked.has(id);document.getElementById('memberModalBlock').textContent=blocked.has(id)?'取消屏蔽':'屏蔽';document.getElementById('memberModalBlock').classList.toggle('danger',!blocked.has(id));document.getElementById('memberProfileModal').classList.add('open')}
+function closeMemberProfile(){document.getElementById('memberProfileModal')?.classList.remove('open')}
+function zoomMemberAvatar(){const m=members.find(x=>x.user_id===profileTargetId);if(!m)return;const av=document.getElementById('memberModalAvatar'),big=av.dataset.zoomed!=='1';av.dataset.zoomed=big?'1':'0';av.style.width=big?'140px':'88px';av.style.height=big?'140px':'88px';av.style.fontSize=big?'48px':'30px';av.style.borderRadius=big?'42px':'28px';av.style.transition='all .18s'}
+function viewMemberAvatar(){const av=document.getElementById('memberModalAvatar');if(!av)return;av.dataset.zoomed='0';zoomMemberAvatar();av.scrollIntoView({behavior:'smooth',block:'center'});av.setAttribute('aria-label','正在查看大图头像');}
+function zoomOwnAvatar(){const av=document.getElementById('profileAvatar');if(!av)return;const big=av.dataset.zoomed!=='1';av.dataset.zoomed=big?'1':'0';av.style.width=big?'84px':'60px';av.style.height=big?'84px':'60px';av.style.fontSize=big?'30px':'20px';av.style.borderRadius=big?'28px':'20px'}
+
+// 个人隐私与点赞记录：所有可见性仍由 Supabase RLS 保障。
+function syncDMPrivacy(){const input=document.getElementById('allowDM');if(input&&prof)input.checked=prof.allow_dm!==false}
+async function saveDMPrivacy(enabled){const input=document.getElementById('allowDM');if(input)input.disabled=true;try{const {data,error}=await sb.from('profiles').update({allow_dm:enabled}).eq('id',me.id).select('allow_dm').single();if(error)throw error;prof={...prof,...data};toast(enabled?'已允许其他人私聊':'已关闭所有人的私聊权限')}catch(e){syncDMPrivacy();toast('保存失败：'+msg(e))}finally{if(input)input.disabled=false}}
+async function showLikePeople(ids,title){ids=ids.filter(id=>!blocked.has(id));const root=document.getElementById('privateLikesList');document.getElementById('privateLikesTitle').textContent=title;document.getElementById('privateLikesModal').classList.add('open');root.innerHTML='<div class="empty">正在加载…</div>';if(!ids.length){root.innerHTML='<div class="empty">暂无点赞记录</div>';return}const {data,error}=await sb.from('profiles').select('id,nickname,bio,avatar_emoji,avatar_url').in('id',ids);if(error){root.textContent='读取用户资料失败：'+msg(error);return}const map=new Map((data||[]).map(x=>[x.id,x]));root.innerHTML=ids.map(id=>{const x=map.get(id)||{nickname:'空间成员'};const accessible=members.some(m=>m.user_id===id&&!m.banned);return `<div class="private-like-person"><button type="button" class="avatar avatar-click" aria-label="查看${esc(x.nickname||'成员')}的资料" onclick="openLikeUserProfile('${id}')">${avatarMarkup(x,x.nickname)}</button><div class="name profile-name-click" onclick="openLikeUserProfile('${id}')">${esc(x.nickname||'空间成员')}<small>${esc(x.bio||'')}</small></div>${accessible?`<button class="mini-wave" onclick="openLikeUserProfile('${id}')">资料 / 私聊 / 屏蔽</button>`:`<span class="small muted">非当前空间成员</span>`}</div>`}).join('')}
+function openLikeUserProfile(id){closePrivateLikes();if(blocked.has(id))return toast('你已屏蔽该成员，可在成员列表中取消屏蔽。');openMemberProfile(id)}
+function openPublicLikes(id){const p=posts.find(x=>x.id===id);if(!p)return;showLikePeople([...new Set((p.likes||[]).filter(x=>!x.is_private&&!blocked.has(x.user_id)).map(x=>x.user_id))],'公开赞 · '+(p.likes||[]).filter(x=>!x.is_private).length+' 人')}
+async function openMyLikes(){const modal=document.getElementById('likesOverviewModal'),root=document.getElementById('likesOverviewBody');modal.classList.add('open');root.innerHTML='<div class="empty">正在读取点赞记录…</div>';try{const {data,error}=await sb.from('posts').select('id,body,author_id,likes(user_id,is_private)').eq('author_id',me.id).eq('removed',false).order('created_at',{ascending:false}).limit(100);if(error)throw error;const mine=data||[];const received=mine.flatMap(p=>(p.likes||[]).map(l=>({...l,post:p})));const sent=posts.flatMap(p=>(p.likes||[]).filter(l=>l.user_id===me.id).map(l=>({...l,post:p})));const section=(title,arr)=>`<div class="like-view"><b>${title} · ${arr.length}</b>${arr.length?arr.map(l=>`<div class="small muted" style="padding:9px 0;border-bottom:1px solid var(--line)">${esc((l.post.body||'图片动态').slice(0,45))} <button class="button" onclick="document.getElementById('likesOverviewModal').classList.remove('open');${l.post.author_id===me.id?`openPrivateLikes('${l.post.id}')`:`openPublicLikes('${l.post.id}')`}">查看相关记录</button></div>`).join(''):'<div class="small muted" style="padding:12px 0">暂无记录</div>'}</div>`;root.innerHTML=section('收到的公开赞',received.filter(l=>!l.is_private))+section('收到的私密赞',received.filter(l=>l.is_private))+section('我发出的赞（当前空间）',sent)}catch(e){root.textContent='读取失败：'+msg(e)}}
+
+function closePrivateLikes(){document.getElementById('privateLikesModal')?.classList.remove('open')}
+async function openPrivateLikes(postId){const p=posts.find(x=>x.id===postId);if(!p||p.author_id!==me.id)return toast('只有动态发布者可以查看私密赞名单。');const root=document.getElementById('privateLikesList');document.getElementById('privateLikesTitle').textContent='私密赞 · '+(p.likes||[]).filter(l=>l.is_private).length+' 人';root.innerHTML='<div class="empty">正在加载名单…</div>';document.getElementById('privateLikesModal').classList.add('open');const ids=[...new Set((p.likes||[]).filter(l=>l.is_private&&l.user_id!==me.id).map(l=>l.user_id))];if(!ids.length){root.innerHTML='<div class="empty">暂时还没有收到私密赞。</div>';return}let profileById=new Map(members.map(m=>[m.user_id,{id:m.user_id,nickname:nm(m),bio:m.profiles?.bio||'',member:m}]));const missing=ids.filter(id=>!profileById.has(id));if(missing.length){const{data,error}=await sb.from('profiles').select('id,nickname,bio,avatar_emoji,avatar_url').in('id',missing);if(!error)(data||[]).forEach(x=>profileById.set(x.id,{...x,member:members.find(m=>m.user_id===x.id)}))}root.innerHTML=ids.map(id=>{const x=profileById.get(id)||{id,nickname:'空间成员',bio:'同场成员'};const canOpen=!!x.member;return `<div class="private-like-person"><button type="button" class="avatar avatar-click" title="查看成员资料" ${canOpen?`onclick="openLikeUserProfile('${id}')"`:'disabled'}>${avatarMarkup(x,x.nickname)}</button><div class="name">${esc(x.nickname||'空间成员')}<small>${esc(x.bio||'同场成员')} · 私密赞</small></div>${canOpen?`<button class="mini-wave" onclick="openLikeUserProfile('${id}')">私聊</button>`:''}</div>`}).join('')}
+
+function chatFromProfile(){const id=profileTargetId;if(!id)return;closeMemberProfile();if(blocked.has(id))return toast('你已屏蔽该成员，请先取消屏蔽。');startChat(id)}
+function toggleBlockFromProfile(){const id=profileTargetId;if(!id)return;act(async()=>{if(blocked.has(id)){const{error}=await sb.from('blocks').delete().match({blocker_id:me.id,blocked_id:id});if(error)throw error;blocked.delete(id);toast('已取消屏蔽。')}else{if(!confirm('屏蔽后，你们都无法再互相发私信或 Wave。确定？'))return;const{error}=await sb.from('blocks').insert({blocker_id:me.id,blocked_id:id});if(error&&error.code!=='23505')throw error;blocked.add(id);toast('已屏蔽该成员。')}closeMemberProfile();await loadAll();renderAll()})}
+function selectChat(id){clearDMMedia();state.activeChat=id;renderChat();loadMsgs().then(async()=>{await loadInbox();renderChat();renderInbox()})}
+function startChat(id){if(id===me.id)return toast('这是你自己。');if(blocked.has(id))return toast('你已屏蔽该成员，请先取消屏蔽。');state.activeChat=id;showPage('chat')}
+async function trySend(o){
+  o.failed=false;let uploadedPath=null;
+  try{
+    const payload={space_id:SP.id,receiver_id:o.to,body:o.body,client_id:o.cid};
+    if(o.file){
+      const kind=dmType(o.file);if(!kind)throw new Error('不支持的媒体类型');
+      const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif','video/mp4':'mp4','video/quicktime':'mov','video/webm':'webm'})[o.file.type];
+      uploadedPath=`${SP.id}/${me.id}/${crypto.randomUUID()}.${ext}`;
+      const r=await sb.storage.from('dm-media').upload(uploadedPath,o.file,{contentType:o.file.type,upsert:false});
+      if(r.error)throw r.error;
+      payload.media_path=uploadedPath;payload.media_type=kind;
+    }
+    const{error}=await sb.from('messages').insert(payload);
+    if(error&&error.code!=='23505')throw error;
+    outbox=outbox.filter(x=>x!==o);
+    if(error?.code==='23505'&&uploadedPath){await sb.storage.from('dm-media').remove([uploadedPath]);}
+  }catch(e){
+    o.failed=true;
+    if(uploadedPath)await sb.storage.from('dm-media').remove([uploadedPath]).catch(()=>{});
+    toast(/row-level|policy|permission/i.test(e.message)?'发送失败：请检查屏蔽状态和私聊权限':msg(e));
+  }finally{
+    await loadMsgs();await loadInbox();renderChat();renderInbox();
+  }
+}
+async function sendMessage(){
+  if(dmUploading)return;
+  if(!has('dm')||state.config.privacy==='low-exposure')return toast('此空间未开放私聊。');
+  const i=document.getElementById('chatInput'),body=i.value.trim(),file=dmSelectedFile;
+  if((!body&&!file)||!state.activeChat||!SP||!me)return;
+  const to=state.activeChat;
+  if(blocked.has(to))return toast('已屏蔽的成员无法私聊');
+  const o={cid:crypto.randomUUID(),body:body||(dmType(file)==='video'?'🎬 视频':'🖼️ 图片'),to,file};
+  i.value='';dmSelectedFile=null;document.getElementById('dmMediaInput').value='';document.getElementById('dmMediaPreview').hidden=true;
+  outbox.push(o);renderChat();dmUploading=!!file;
+  try{await trySend(o)}finally{dmUploading=false}
+}
+async function retractMessage(id){return act(async()=>{const m=chatMsgs.find(x=>x.id===id);if(!m||m.sender_id!==me.id)return toast('只能撤回自己发送的消息。');if(m.retracted_at)return toast('这条消息已经撤回。');const age=Date.now()-new Date(m.created_at).getTime();if(age<0||age>10*60*1000)return toast('消息发送超过 10 分钟，不能撤回。');if(!confirm('撤回这条消息？对话双方都会看到“这条消息已撤回”。'))return;const{error}=await sb.rpc('retract_own_message',{p_message_id:id});if(error)throw error;await loadMsgs();await loadInbox();renderChat();renderInbox();toast('消息已撤回。')})}
+const resend=cid=>{const o=outbox.find(x=>x.cid===cid);if(o)trySend(o)};
+
+// ---------- 管理后台 ----------
+const STL={pending:'待处理',in_progress:'处理中',resolved:'已处理',dismissed:'已驳回'};
+async function loadAdmin(){if(!SP||!isAdmin())return;
+  const sid=SP.id;
+  // Avoid ambiguous post/profile embeds in the reports query.
+  const [r,m]=await Promise.all([
+    sb.from('reports').select('id,reason,status,post_id,reporter_id,created_at').eq('space_id',sid).order('created_at',{ascending:false}).limit(50),
+    sb.from('space_members').select('user_id,role,status,banned,profiles(nickname)').eq('space_id',sid)
+  ]);
+  if(!SP||SP.id!==sid)return;
+  if(r.error){console.error('report queue:',r.error);document.getElementById('reportList').innerHTML='<div class="empty">举报队列加载失败：'+esc(msg(r.error))+'</div>'}
+  else{
+    const records=r.data||[],postIds=[...new Set(records.map(x=>x.post_id).filter(Boolean))],userIds=[...new Set(records.map(x=>x.reporter_id).filter(Boolean))];
+    let postMap=new Map(),profileMap=new Map();
+    if(postIds.length){const v=await sb.from('posts').select('id,body,removed').in('id',postIds);if(v.error)console.warn('report posts:',v.error);else postMap=new Map((v.data||[]).map(x=>[x.id,x]));}
+    if(userIds.length){const v=await sb.from('profiles').select('id,nickname').in('id',userIds);if(v.error)console.warn('report profiles:',v.error);else profileMap=new Map((v.data||[]).map(x=>[x.id,x]));}
+    if(!SP||SP.id!==sid)return;
+    document.getElementById('reportList').innerHTML=records.length?records.map(x=>{const post=postMap.get(x.post_id),reporter=profileMap.get(x.reporter_id);return `<div class="person" style="flex-wrap:wrap;align-items:flex-start"><div class="name" style="flex:1;min-width:220px">${esc((post?.body||'（动态不存在或无权限读取）').slice(0,120))}<small>举报人 ${esc(reporter?.nickname||'?')} · 原因：${esc(x.reason)} · ${esc(STL[x.status]||x.status)}${post?.removed?' · 已移除':''}</small></div><div class="row2"><button class="mini-wave" onclick="setReport('${x.id}','in_progress')">处理中</button><button class="mini-wave" onclick="setReport('${x.id}','dismissed')">驳回</button><button class="mini-wave" onclick="removePost('${x.post_id}','${x.id}')">移除动态</button></div></div>`}).join(''):'<div class="empty">暂无举报。</div>';
+  }
+  document.getElementById('memberAdmin').innerHTML=m.error?'<div class="empty">成员加载失败：'+esc(msg(m.error))+'</div>':(m.data||[]).map(x=>({...x,banned:!!x.banned})).map(x=>`<div class="person"><button type="button" class="avatar avatar-click" title="查看成员资料" onclick="openMemberProfile('${x.user_id}')">${esc(initials(x.profiles?.nickname))}</button><div class="name profile-name-click" onclick="openMemberProfile('${x.user_id}')">${esc(x.profiles?.nickname||'?')}<small>${x.role==='admin'?'管理员':'成员'}${x.banned?' · 已封禁':''}</small></div>${x.user_id===me.id?'':`<button class="mini-wave" onclick="setBan('${x.user_id}',${!x.banned})">${x.banned?'解除封禁':'封禁'}</button>`}</div>`).join('');
+}
+const setReport=(id,s)=>act(async()=>{const{error}=await sb.rpc('review_report',{p_report_id:id,p_status:s});if(error)throw error;loadAdmin()});
+const removePost=(pid,rid)=>act(async()=>{if(!confirm('移除这条动态？'))return;const a=await sb.rpc('moderate_post',{p_post_id:pid});if(a.error)throw a.error;const b=await sb.rpc('review_report',{p_report_id:rid,p_status:'resolved'});if(b.error)throw b.error;toast('已移除。');loadAdmin();loadFeed().then(renderAll)});
+const setBan=(uid,b)=>act(async()=>{if(!confirm(b?'封禁该成员？':'解除封禁？'))return;const{error}=await sb.from('space_members').update({banned:!!b}).match({space_id:SP.id,user_id:uid});if(error)throw error;toast(b?'已封禁。':'已解除封禁。');loadAdmin();loadMembers().then(renderAll)});
+</script>
+<script>
+/* Isolated chat sizing: original messaging, upload, likes and blocking code unchanged. */
+(function(){
+  'use strict';
+  var page=document.getElementById('page-chat');
+  var button=document.getElementById('dmSizeToggle');
+  if(!page||!button)return;
+  function setExpanded(expanded){
+    page.classList.toggle('dm-expanded',!!expanded);
+    document.body.classList.toggle('dm-expanded-lock',!!expanded);
+    button.textContent=expanded?'⤢ 缩小':'⛶ 放大';
+    button.setAttribute('aria-expanded',String(!!expanded));
+    button.setAttribute('aria-label',expanded?'缩小聊天窗口':'放大聊天窗口');
+    button.title=expanded?'恢复原始聊天窗口':'放大聊天窗口';
+  }
+  window.toggleDMExpanded=function(){setExpanded(!page.classList.contains('dm-expanded'));};
+  document.addEventListener('keydown',function(event){
+    if(event.key==='Escape'&&page.classList.contains('dm-expanded'))setExpanded(false);
+  });
+  /* Navigating to another page always restores normal sizing. */
+  new MutationObserver(function(){
+    if(!page.classList.contains('active')&&page.classList.contains('dm-expanded'))setExpanded(false);
+  }).observe(page,{attributes:true,attributeFilter:['class']});
+})();
+</script>
+<script>
+/* 同场主屏幕安装帮助：纯前端引导，不请求通知权限、不修改业务逻辑 */
+function spStandalone(){return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone===true}
+function updateSPInstallHint(){const el=document.getElementById('spInstallHint');if(!el)return;let dismissed=false;try{dismissed=sessionStorage.getItem('sp_install_hint_dismissed')==='1'}catch(e){}el.hidden=spStandalone()||dismissed}
+function dismissSPInstallHint(){try{sessionStorage.setItem('sp_install_hint_dismissed','1')}catch(e){}updateSPInstallHint()}
+function openSPInstallGuide(){const mask=document.getElementById('spInstallGuide'),content=document.getElementById('spGuideSteps');if(!mask||!content)return;const ua=navigator.userAgent||'',apple=/iPad|iPhone|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1),android=/Android/i.test(ua);let html='';if(apple){html='<ol class="sp-guide-steps"><li>使用 <b>Safari</b> 打开同场网站（如果在微信等应用内，请先选择“在 Safari 中打开”）。</li><li>点击浏览器的 <b>分享</b> 按钮（方框向上箭头）。</li><li>在分享菜单中选择 <b>添加到主屏幕</b>，然后点击 <b>添加</b>。</li><li>以后从主屏幕的“同场”图标进入。</li></ol>'}else if(android){html='<ol class="sp-guide-steps"><li>使用 <b>Chrome</b> 打开同场。</li><li>点击右上角 <b>⋮</b> 菜单。</li><li>选择 <b>添加到主屏幕</b> 或 <b>安装应用</b>（具体名称因设备而异）。</li><li>确认添加，再从主屏幕打开同场。</li></ol>'}else{html='<ol class="sp-guide-steps"><li>在手机上用 Safari（iPhone/iPad）或 Chrome（Android）打开同场。</li><li>iPhone/iPad：分享 → 添加到主屏幕 → 添加。</li><li>Android：浏览器菜单 ⋮ → 添加到主屏幕 / 安装应用。</li><li>电脑：支持安装的网站可在地址栏或浏览器菜单中找到安装入口。</li></ol>'}content.innerHTML=html;mask.classList.add('open');const btn=mask.querySelector('button');btn?.focus()}
+function closeSPInstallGuide(){document.getElementById('spInstallGuide')?.classList.remove('open')}
+window.addEventListener('DOMContentLoaded',updateSPInstallHint);
+window.addEventListener('pageshow',updateSPInstallHint);
+window.addEventListener('keydown',e=>{if(e.key==='Escape')closeSPInstallGuide()});
+</script><div class="sp-dm-alerts" id="spDmAlerts" aria-live="polite" aria-atomic="false"></div><script src="./push-config.js?v=20261019b"></script>
+<script>
+/* SAME PLACE / standalone notifications — does not change existing DM send flow. */
+(()=>{'use strict';
+const root=new URL('./',document.currentScript?.src||location.href);
+const workerURL=new URL('service-worker.js',root);
+const quietKey='sp_push_quiet_v1';
+const seen=new Map();
+let channel=null,channelUser=null,authUserId=null,pendingLink=false;
+const $=id=>document.getElementById(id);
+const user=()=>typeof me!=='undefined'?me:null;
+const quiet=()=>localStorage.getItem(quietKey)==='1';
+const status=msg=>{if($('spPushStatus'))$('spPushStatus').textContent=msg};
+const supports=()=>isSecureContext&&'serviceWorker'in navigator&&'PushManager'in window&&'Notification'in window;
+const senderName=id=>typeof members!=='undefined'?members.find(x=>x.user_id===id)?.profiles?.nickname||'一位同场成员':'一位同场成员';
+const summary=r=>r.media_type==='video'?'给你发来一段视频':r.media_type==='image'?'给你发来一张图片':r.media_type==='audio'?'给你发来一条语音消息':'给你发来一条新消息';
+const bytes=s=>{let t=s.replace(/-/g,'+').replace(/_/g,'/');t+='='.repeat((4-t.length%4)%4);return Uint8Array.from(atob(t),x=>x.charCodeAt(0))};
+async function registration(){return navigator.serviceWorker.getRegistration(root.pathname)}
+async function announceIdentity(id){try{const r=await registration();const sw=r?.active||navigator.serviceWorker.controller;sw?.postMessage({kind:'SP_IDENTITY',user_id:id||null})}catch(e){console.warn('SW identity',e)}}
+function activeChat(r){return (typeof SP!=='undefined'?SP?.id:null)===r.space_id&&$('page-chat')?.classList.contains('active')&&(typeof state!=='undefined'?state?.activeChat:null)===r.sender_id}
+async function jump(r){if(!user()){location.assign(new URL('?space_id='+encodeURIComponent(r.space_id)+'&dm='+encodeURIComponent(r.sender_id),root));return}
+ if((typeof SP!=='undefined'?SP?.id:null)!==r.space_id){
+   const {data:membership,error:memError}=await sb.from('space_members').select('space_id').eq('space_id',r.space_id).eq('user_id',user().id).eq('status','active').eq('banned',false).maybeSingle();
+   if(memError||!membership){if(typeof toast==='function')toast('你没有进入该空间的权限');return}
+   const {data:space,error}=await sb.from('spaces').select('slug').eq('id',r.space_id).maybeSingle();
+   if(error||!space?.slug){if(typeof toast==='function')toast('无法定位消息所属空间');return}
+   await enterSpace(space.slug);
+ }
+ if((typeof SP!=='undefined'?SP?.id:null)===r.space_id&&typeof openInboxChat==='function')openInboxChat(r.sender_id);
+}
+function alertFor(r){if(!user()||quiet()||r.sender_id===user().id)return false;
+ if(typeof blocked!=='undefined'&&blocked.has(r.sender_id))return false;
+ if(activeChat(r)&&document.visibilityState==='visible')return true;
+ const container=$('spDmAlerts');if(!container)return false;
+ const card=document.createElement('div');card.className='sp-dm-alert';card.setAttribute('role','status');
+ const main=document.createElement('div');const title=document.createElement('strong');title.textContent=senderName(r.sender_id)+' · 新私聊';
+ const line=document.createElement('p');line.textContent=summary(r);const open=document.createElement('button');open.textContent='查看消息 ↗';
+ open.addEventListener('click',()=>{card.remove();jump(r).catch(console.warn)});
+ const close=document.createElement('button');close.setAttribute('aria-label','关闭');close.textContent='×';close.addEventListener('click',()=>card.remove());
+ main.append(title,line,open);card.append(main,close);container.prepend(card);setTimeout(()=>card.remove(),8500);return true;
+}
+async function incoming(r){if(!r?.id||!user()||r.receiver_id!==user().id)return false;
+ if(seen.has(r.id))return true;seen.set(r.id,Date.now());if(seen.size>300){for(const [id,t] of seen)if(Date.now()-t>3600000)seen.delete(id)}
+ const shown=alertFor(r);
+ if((typeof SP!=='undefined'?SP?.id:null)===r.space_id){if(typeof loadInbox==='function')await loadInbox();if(typeof renderInbox==='function')renderInbox();if(typeof updateMessageBadges==='function')updateMessageBadges()}
+ return shown;
+}
+function connect(id){if(channel&&channelUser===id)return;if(channel){sb.removeChannel(channel);channel=null}channelUser=id||null;if(!id)return;
+ channel=sb.channel('sp-alert-'+id).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'receiver_id=eq.'+id},payload=>incoming(payload.new).catch(console.warn)).subscribe();
+}
+async function unsubscribeAndRemove(owner){if(!supports())return;
+ const r=await registration(),sub=await r?.pushManager.getSubscription();if(!sub){await announceIdentity(null);return}
+ if(owner){const result=await sb.rpc('sp_unregister_push',{p_endpoint:sub.endpoint});if(result.error)throw result.error}
+ await sub.unsubscribe();await announceIdentity(null);
+}
+window.spBeforeLogout=async()=>{try{await unsubscribeAndRemove(user()?.id||authUserId)}catch(e){console.warn('Push cleanup failed:',e);status('退出前通知解绑失败，请检查设备订阅')}};
+window.spSetQuiet=async enabled=>{localStorage.setItem(quietKey,enabled?'1':'0');if(enabled)await window.spDisablePush();else window.spPushStatus()};
+window.spEnablePush=async()=>{try{
+ const u=user();if(!u)throw Error('请先登录');if(quiet())throw Error('请先关闭免打扰');if(!supports())throw Error('设备暂不支持 Web Push；iPhone/iPad 请从主屏幕打开');
+ const key=window.SAME_PLACE_VAPID_PUBLIC_KEY;if(!key||key==='PASTE_PUBLIC_VAPID_KEY_HERE')throw Error('管理员还没有配置推送公钥');
+ if(await Notification.requestPermission()!=='granted')throw Error('请允许系统通知');
+ const r=await navigator.serviceWorker.register(workerURL.href,{scope:root.pathname});await navigator.serviceWorker.ready;
+ let sub=await r.pushManager.getSubscription();if(!sub)sub=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:bytes(key)});
+ const row=sub.toJSON();if(!row.keys?.p256dh||!row.keys?.auth)throw Error('推送密钥读取失败');
+ const {error}=await sb.rpc('sp_register_push',{p_endpoint:sub.endpoint,p_p256dh:row.keys.p256dh,p_auth:row.keys.auth,p_user_agent:navigator.userAgent.slice(0,240)});
+ if(error)throw error;await announceIdentity(u.id);status('✅ 本设备已订阅；还需部署服务端推送程序');if(typeof toast==='function')toast('设备通知已开启');
+ }catch(e){status('开启失败：'+e.message);if(typeof toast==='function')toast(e.message)}};
+window.spDisablePush=async()=>{try{await unsubscribeAndRemove(user()?.id||authUserId);status('本设备通知已关闭');if(typeof toast==='function')toast('设备通知已关闭')}catch(e){status('关闭失败：'+e.message)}};
+window.spPushStatus=async()=>{if($('spQuiet'))$('spQuiet').checked=quiet();if(!supports()){status('当前环境不支持后台推送；站内提醒仍可使用');return}
+ try{const r=await registration(),sub=await r?.pushManager.getSubscription();status(sub?'已存在设备订阅（需检查服务端配置）':'本设备尚未订阅通知')}catch{status('无法读取设备订阅状态')}};
+// Service worker only suppresses a system popup after a foreground tab confirms it handled the alert.
+navigator.serviceWorker?.addEventListener('message',e=>{if(e.data?.kind!=='SP_PUSH_FOREGROUND')return;
+ const reply=ok=>{try{e.ports?.[0]?.postMessage({handled:!!ok})}catch{}};
+ const r=e.data.record;
+ if(!user()||quiet()||document.visibilityState!=='visible'||r?.receiver_id!==user().id){reply(false);return}
+ incoming(r).then(reply).catch(()=>reply(false));
+});
+async function openDeepLink(){if(pendingLink||!user())return;const q=new URLSearchParams(location.search),spaceId=q.get('space_id'),senderId=q.get('dm');if(!spaceId||!senderId)return;
+ if(!/^[0-9a-f-]{36}$/i.test(spaceId)||!/^[0-9a-f-]{36}$/i.test(senderId))return;
+ pendingLink=true;try{await jump({space_id:spaceId,sender_id:senderId});const clean=new URL(location.href);clean.searchParams.delete('space_id');clean.searchParams.delete('dm');history.replaceState(null,'',clean)}finally{pendingLink=false}}
+function setup(){if(typeof sb==='undefined'){setTimeout(setup,150);return}
+ sb.auth.getUser().then(async ({data})=>{authUserId=data.user?.id||null;connect(authUserId);if(authUserId)await announceIdentity(authUserId);spPushStatus()}).catch(console.warn);
+ sb.auth.onAuthStateChange((event,session)=>{setTimeout(async()=>{
+ const next=session?.user?.id||null,prior=authUserId;authUserId=next;connect(next);
+ if(prior&&next!==prior){try{await unsubscribeAndRemove(prior)}catch(e){console.warn('Push account switch cleanup:',e)} }
+ if(next){await announceIdentity(next);await openDeepLink()}else await announceIdentity(null);
+ },0)});
+ window.addEventListener('pageshow',()=>{spPushStatus();openDeepLink().catch(console.warn)});
+ const poll=setInterval(()=>{if(user()){clearInterval(poll);openDeepLink().catch(console.warn)}},500);setTimeout(()=>clearInterval(poll),30000);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
+})();
+
+</script></body></html>
