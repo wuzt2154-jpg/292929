@@ -172,7 +172,7 @@ window.addEventListener('DOMContentLoaded',function(){try{load()}catch(e){consol
 </script>
 <script>
 /* ===== 同场 云端版：接管数据层。同名函数覆盖原本地演示，界面保持原样 ===== */
-const CFG={url:'https://hkekgujgciklwvvdzqxa.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZWtndWpnY2lrbHd2dmR6cXhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMjg2NDIsImV4cCI6MjEwNzgwNDY0Mn0.DrQzk5MOW1U4ChTVGSMLdCEBqGiZy8jEvazN7obqxbk'};
+const CFG={url:'https://umdufjjsjbbddtcmagkg.supabase.co',key:'sb_publishable_YmnktJhfCeNUUaEt9ut2Xw_q7-REOUz'};
 const sb=supabase.createClient(CFG.url,CFG.key);
 const $=s=>document.querySelector(s);
 const ERR={'Invalid login credentials':'邮箱或密码错误','Email not confirmed':'邮箱尚未验证，请先点击验证邮件里的链接','User already registered':'该邮箱已注册',email_not_verified:'请先点击验证邮件里的链接，再重新登录',too_many_spaces:'每个账号最多创建 5 个空间',bad_name:'请填写空间名称',not_admin:'只有空间管理员可以这样做'};
