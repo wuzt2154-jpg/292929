@@ -311,9 +311,9 @@ async function loadMembers(){if(!SP||!me)return;const sid=SP.id,epoch=spaceEpoch
 async function loadWaves(){if(!SP||!me)return;const sid=SP.id,epoch=spaceEpoch;const{data,error}=await sb.from('waves').select('from_id,created_at,profiles!waves_from_id_fkey(nickname,avatar_emoji,avatar_url)').eq('space_id',sid).eq('to_id',me.id).order('created_at',{ascending:false}).limit(30);if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;if(error){console.warn('loadWaves',error.message);wavesIn=[];return}wavesIn=(data||[]).filter(w=>!blocked.has(w.from_id))}
 async function loadInbox(){if(!SP||!me)return;const sid=SP.id,epoch=spaceEpoch;const{data,error}=await sb.from('messages').select('id,space_id,sender_id,receiver_id,body,read_at,created_at,client_id').eq('space_id',sid).or(`sender_id.eq.${me.id},receiver_id.eq.${me.id}`).order('created_at',{ascending:false}).limit(300);if(!SP||SP.id!==sid||spaceEpoch!==epoch)return;if(error){console.warn('loadInbox',error.message);inboxMsgs=[];return}const map=new Map();for(const m of(data||[])){const peer=m.sender_id===me.id?m.receiver_id:m.sender_id;if(!peer||peer===me.id||blocked.has(peer))continue;let c=map.get(peer);if(!c){c={peer_id:peer,last:m,unread:0};map.set(peer,c)}if(m.receiver_id===me.id&&!m.read_at)c.unread++}inboxMsgs=[...map.values()].sort((a,b)=>new Date(b.last.created_at)-new Date(a.last.created_at))}
 async function loadMsgs(){const p=state.activeChat;if(!SP||!me||!p)return;const sid=SP.id,epoch=spaceEpoch,a=me.id;
-  const{data,error}=await sb.from('messages').select('*').eq('space_id',sid).or(`and(sender_id.eq.${a},receiver_id.eq.${p}),and(sender_id.eq.${p},receiver_id.eq.${a})`).order('created_at').limit(300);
-  if(!SP||SP.id!==sid||spaceEpoch!==epoch||state.activeChat!==p)return;if(error)return toast(msg(error));chatMsgs=blocked.has(p)?[]:(data||[]);await dmSignedUrls(chatMsgs);if(!SP||SP.id!==sid||spaceEpoch!==epoch||state.activeChat!==p)return;
-  if((data||[]).some(m=>m.receiver_id===a&&!m.read_at))sb.from('messages').update({read_at:new Date().toISOString()}).eq('space_id',sid).eq('sender_id',p).eq('receiver_id',a).is('read_at',null).then(()=>{})}
+  const{data,error}=await sb.from('messages').select('*').eq('space_id',sid).or(`and(sender_id.eq.${a},receiver_id.eq.${p}),and(sender_id.eq.${p},receiver_id.eq.${a})`).order('created_at',{ascending:false}).order('id',{ascending:false}).limit(300);
+  if(!SP||SP.id!==sid||spaceEpoch!==epoch||state.activeChat!==p)return;if(error)return toast(msg(error));chatMsgs=blocked.has(p)?[]:(data||[]).slice().reverse();await dmSignedUrls(chatMsgs);if(!SP||SP.id!==sid||spaceEpoch!==epoch||state.activeChat!==p)return;
+  if(document.visibilityState==='visible'&&$('#page-chat')?.classList.contains('active')&&(data||[]).some(m=>m.receiver_id===a&&!m.read_at))sb.from('messages').update({read_at:new Date().toISOString()}).eq('space_id',sid).eq('sender_id',p).eq('receiver_id',a).is('read_at',null).then(()=>{})}
 function subscribe(){if(chan)sb.removeChannel(chan);const f=`space_id=eq.${SP.id}`,ch=sb.channel('sp-'+SP.id),go=()=>{clearTimeout(deb);deb=setTimeout(loadAll,300)};
   for(const[t,fl]of[['posts',f],['likes',null],['waves',f],['messages',f],['like_notifications',null]])ch.on('postgres_changes',{event:'*',schema:'public',table:t,...(fl?{filter:fl}:{})},()=>{if(t==='like_notifications')loadLikeNotifications();else go()});
   ch.subscribe(s=>{if(s==='SUBSCRIBED')go()});chan=ch;clearInterval(tmr);tmr=setInterval(loadAll,20000)}
@@ -433,14 +433,15 @@ const dmUrlCache=new Map();
 function dmType(file){if(!file)return null;return /^image\/(jpeg|png|webp|gif)$/.test(file.type)?'image':/^video\/(mp4|quicktime|webm)$/.test(file.type)?'video':null}
 function chooseDMMedia(input){const f=input.files?.[0];if(!f)return;const type=dmType(f);if(!type){toast('仅支持 JPG/PNG/WebP/GIF 图片和 MP4/MOV/WebM 视频');input.value='';return}if(f.size>50*1024*1024){toast('单个图片或视频不得超过 50MB');input.value='';return}dmSelectedFile=f;const pre=document.getElementById('dmMediaPreview');pre.hidden=false;pre.innerHTML=`<span>${type==='image'?'🖼️ 图片':'🎬 视频'}：${esc(f.name)} · ${(f.size/1024/1024).toFixed(1)} MB</span><button type="button" onclick="clearDMMedia()">移除 ×</button>`}
 function clearDMMedia(){if(dmUploading)return;dmSelectedFile=null;document.getElementById('dmMediaInput').value='';const pre=document.getElementById('dmMediaPreview');pre.hidden=true;pre.innerHTML=''}
-async function dmSignedUrls(messages){const paths=[...new Set(messages.filter(m=>m.media_path&&!m.retracted_at).map(m=>m.media_path))].filter(x=>!dmUrlCache.has(x));if(!paths.length)return;for(let i=0;i<paths.length;i+=20){const batch=paths.slice(i,i+20),r=await sb.storage.from('dm-media').createSignedUrls(batch,3600);if(r.error){console.warn('DM media URL:',r.error.message);continue}for(const item of r.data||[])if(item.signedUrl)dmUrlCache.set(item.path,{url:item.signedUrl,expiry:Date.now()+3500*1000})}}
+async function dmSignedUrls(messages){const paths=[...new Set(messages.filter(m=>m.media_path&&!m.retracted_at).map(m=>m.media_path))].filter(x=>!dmUrlCache.has(x)||dmUrlCache.get(x).expiry<Date.now());if(!paths.length)return;for(let i=0;i<paths.length;i+=20){const batch=paths.slice(i,i+20),r=await sb.storage.from('dm-media').createSignedUrls(batch,3600);if(r.error){console.warn('DM media URL:',r.error.message);continue}for(const item of r.data||[])if(item.signedUrl)dmUrlCache.set(item.path,{url:item.signedUrl,expiry:Date.now()+3500*1000})}}
 function dmMediaHtml(m){if(!m.media_path||m.retracted_at)return '';const c=dmUrlCache.get(m.media_path);if(!c||c.expiry<Date.now()){dmUrlCache.delete(m.media_path);return '<div class="small">媒体链接加载中，请刷新对话</div>'}const url=esc(c.url);return m.media_type==='image'?`<a href="${url}" target="_blank" rel="noopener"><img class="dm-img" src="${url}" loading="lazy" alt="聊天图片"></a>`:m.media_type==='video'?`<video class="dm-video" src="${url}" controls playsinline preload="metadata"></video>`:''}
 let lastPeer=null;
 function renderChat(){const ps=others();if(!state.activeChat)state.activeChat=inboxMsgs[0]?.peer_id||ps[0]?.user_id||null;const a=state.activeChat,cur=ps.find(m=>m.user_id===a);const peerName=id=>nm(ps.find(m=>m.user_id===id)||{profiles:{nickname:'空间成员'}});const ordered=[...inboxMsgs.map(c=>({user_id:c.peer_id,conversation:c})),...ps.filter(m=>!inboxMsgs.some(c=>c.peer_id===m.user_id)).map(m=>({user_id:m.user_id,conversation:null}))];
   document.getElementById('chatList').innerHTML='<div class="inbox-label">最近消息</div>'+ordered.map(x=>{const c=x.conversation,prev=c?.last,unread=c?.unread||0;return `<div class="chat-person ${a===x.user_id?'active':''}" onclick="selectChat('${x.user_id}')"><div class="avatar" onclick="event.stopPropagation();openMemberProfile('${x.user_id}')">${avatarMarkup(ps.find(m=>m.user_id===x.user_id)?.profiles,peerName(x.user_id))}</div><div class="inbox-copy"><div class="inbox-name">${esc(peerName(x.user_id))}${unread?`<b class="unread-count">${unread>99?'99+':unread}</b>`:''}</div><div class="inbox-preview">${prev?`${prev.sender_id===me.id?'我：':''}${esc(prev.body||'')}`:'开始聊天'}</div><div class="inbox-time">${prev?ago(prev.created_at):'新对话'}</div></div></div>`}).join('')||'<div class="empty">还没有消息。可以从空间动态或成员列表发起私聊。</div>';
   setT('chatTitle',cur?nm(cur)+' · '+state.space:(a?'空间成员 · '+state.space:'选择一个对话'));const root=document.getElementById('messages'),end=root.scrollHeight-root.scrollTop-root.clientHeight<60||lastPeer!==a;lastPeer=a;
   const ids=new Set(chatMsgs.map(x=>x.client_id).filter(Boolean)),st=t=>`<div style="font-size:11px;opacity:.6">${t}</div>`;
-  root.innerHTML=(chatMsgs.map(x=>{const retracted=!!x.retracted_at,age=Date.now()-new Date(x.created_at).getTime(),canRetract=x.sender_id===me.id&&!retracted&&age>=0&&age<=10*60*1000;const body=retracted?'这条消息已撤回':(x.body||'');return `<div class="bubble ${x.sender_id===me.id?'mine':''} ${retracted?'message-retracted':''}">${esc(body)}${dmMediaHtml(x)}${x.sender_id===me.id?st(retracted?'已撤回':(x.read_at?'已读':'已送达')):''}${canRetract?`<div class="message-actions"><button type="button" class="message-retract" onclick="retractMessage('${x.id}')">撤回</button></div>`:''}</div>`}).join('')+outbox.filter(o=>o.to===a&&!ids.has(o.cid)).map(o=>`<div class="bubble mine">${esc(o.body)}${st(o.failed?`发送失败 <a href="#" onclick="resend('${o.cid}');return false">重试</a>`:'发送中…')}</div>`).join(''))||'<div class="empty">还没有消息，打个招呼吧。</div>';
+  const nextChatHTML=(chatMsgs.map(x=>{const retracted=!!x.retracted_at,age=Date.now()-new Date(x.created_at).getTime(),canRetract=x.sender_id===me.id&&!retracted&&age>=0&&age<=10*60*1000;const body=retracted?'这条消息已撤回':(x.body||'');return `<div data-sp-message-id="${esc(x.id)}" class="bubble ${x.sender_id===me.id?'mine':''} ${retracted?'message-retracted':''}">${esc(body)}${dmMediaHtml(x)}${x.sender_id===me.id?st(retracted?'已撤回':(x.read_at?'已读':'已送达')):''}${canRetract?`<div class="message-actions"><button type="button" class="message-retract" onclick="retractMessage('${x.id}')">撤回</button></div>`:''}</div>`}).join('')+outbox.filter(o=>o.to===a&&!ids.has(o.cid)).map(o=>`<div class="bubble mine">${esc(o.body)}${st(o.failed?`发送失败 <a href="#" onclick="resend('${o.cid}');return false">重试</a>`:'发送中…')}</div>`).join(''))||'<div class="empty">还没有消息，打个招呼吧。</div>';
+  if(root.dataset.peer!==a||root.__spChatHTML!==nextChatHTML){const retained=new Map([...root.querySelectorAll('[data-sp-message-id]')].map(n=>[n.dataset.spMessageId,n.querySelector('video,a:has(img)')]));root.innerHTML=nextChatHTML;root.querySelectorAll('[data-sp-message-id]').forEach(n=>{const old=retained.get(n.dataset.spMessageId),fresh=n.querySelector('video,a:has(img)');if(old&&fresh&&(old.src||old.href)===(fresh.src||fresh.href))fresh.replaceWith(old)});root.__spChatHTML=nextChatHTML;root.dataset.peer=a||'';}
   if(end)root.scrollTop=root.scrollHeight}
 
 // ---------- 互动 ----------
@@ -643,11 +644,20 @@ window.spEnablePush=async()=>{try{
  let sub=await r.pushManager.getSubscription();if(!sub)sub=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:bytes(key)});
  const row=sub.toJSON();if(!row.keys?.p256dh||!row.keys?.auth)throw Error('推送密钥读取失败');
  const {error}=await sb.rpc('sp_register_push',{p_endpoint:sub.endpoint,p_p256dh:row.keys.p256dh,p_auth:row.keys.auth,p_user_agent:navigator.userAgent.slice(0,240)});
- if(error)throw error;await announceIdentity(u.id);status('✅ 本设备已订阅；还需部署服务端推送程序');if(typeof toast==='function')toast('设备通知已开启');
+ if(error)throw error;await announceIdentity(u.id);status('✅ 本设备订阅已保存，请用另一账号发送私聊，验证通知是否送达');if(typeof toast==='function')toast('设备通知已开启');
  }catch(e){status('开启失败：'+e.message);if(typeof toast==='function')toast(e.message)}};
 window.spDisablePush=async()=>{try{await unsubscribeAndRemove(user()?.id||authUserId);status('本设备通知已关闭');if(typeof toast==='function')toast('设备通知已关闭')}catch(e){status('关闭失败：'+e.message)}};
-window.spPushStatus=async()=>{if($('spQuiet'))$('spQuiet').checked=quiet();if(!supports()){status('当前环境不支持后台推送；站内提醒仍可使用');return}
- try{const r=await registration(),sub=await r?.pushManager.getSubscription();status(sub?'已存在设备订阅（需检查服务端配置）':'本设备尚未订阅通知')}catch{status('无法读取设备订阅状态')}};
+window.spPushStatus=async()=>{if($('spQuiet'))$('spQuiet').checked=quiet();
+ if(quiet()){status('免打扰已开启，后台推送已关闭');return}
+ if(!supports()){status('当前环境不支持后台推送；iPhone/iPad 请从主屏幕图标打开同场');return}
+ if(Notification.permission==='denied'){status('系统已拒绝通知权限，请在设备设置中允许同场通知');return}
+ if(!user()){status('请先登录，再开启本设备通知');return}
+ try{const r=await registration(),sub=await r?.pushManager.getSubscription();
+  if(!sub){status('本设备尚未订阅通知，请点击开启通知');return}
+  const result=await sb.rpc('sp_push_subscription_status',{p_endpoint:sub.endpoint});
+  if(result.error){status('设备已有订阅，账号登记状态暂时无法确认，请稍后重试');return}
+  status(result.data?'✅ 本设备已与当前账号绑定；通知送达需通过另一账号私聊测试':'设备订阅尚未绑定当前账号，请点击开启通知重新登记');
+ }catch{status('无法读取通知状态，请检查网络后重试')}};
 // Service worker only suppresses a system popup after a foreground tab confirms it handled the alert.
 navigator.serviceWorker?.addEventListener('message',e=>{if(e.data?.kind!=='SP_PUSH_FOREGROUND')return;
  const reply=ok=>{try{e.ports?.[0]?.postMessage({handled:!!ok})}catch{}};
@@ -671,4 +681,10 @@ function setup(){if(typeof sb==='undefined'){setTimeout(setup,150);return}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
 })();
 
-</script></body></html>
+</script>
+<script src="./same-place-sticker-editor.js?v=20261030"></script>
+<script src="./same-place-campus-upgrade.js?v=20261030"></script>
+<script src="./same-place-campus-hotfix.js?v=20261030"></script>
+<script src="./same-place-game-rooms.js?v=20261030"></script>
+<script src="./same-place-motion.js?v=20261030"></script></body></html>
+
